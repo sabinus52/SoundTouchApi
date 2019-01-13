@@ -1,0 +1,23 @@
+{
+    "name": "sabinus52/soundtouchapi",
+    "description": "API client to control SoundTouch Bose speakers.",
+    "type": "library",
+    "keywords": ["API", "Bose", "SoundTouch"],
+    "license": "MIT",
+    "homepage" : "https://github.com/sabinus52/SoundTouchApi",
+    "authors": [
+        {
+            "name": "Olivier (Sabinus52)",
+            "email": "sabinus52@gmail.com"
+        }
+    ],
+    "require": {
+        "php": "^5.2||^7",
+        "guzzlehttp/guzzle": "~6"
+    },
+    "autoload": {
+        "psr-4" : {
+            "Sabinus\\SoundTouch\\" : "src/"
+        }
+    }
+}
