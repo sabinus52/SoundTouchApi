@@ -10,7 +10,6 @@
 namespace Sabinus\SoundTouch\Request;
 
 use Sabinus\SoundTouch\ClientApi;
-use Sabinus\SoundTouch\Response\InfoResponse;
 
 
 class GetInfoRequest extends RequestAbstract implements RequestInterface

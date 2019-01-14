@@ -16,6 +16,14 @@ use \Sabinus\SoundTouch\Constants\ImageStatus;
 class NowPlaying
 {
 
+    // Constantes de $playStatus
+    const PLAY      = 'PLAY_STATE';
+    const PAUSE     = 'PAUSE_STATE';
+    const STOP      = 'STOP_STATE';
+    const BUFFERING = 'BUFFERING_STATE';
+    const INVALID   = 'INVALID_PLAY_STATUS';
+
+
     private $deviceID;
 
     private $source;
