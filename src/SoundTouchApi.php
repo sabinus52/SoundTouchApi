@@ -11,8 +11,11 @@ namespace Sabinus\SoundTouch;
 
 use \Sabinus\SoundTouch\Request\GetInfoRequest;
 use \Sabinus\SoundTouch\Request\GetNowPlayingRequest;
+use \Sabinus\SoundTouch\Request\GetVolumeRequest;
+use \Sabinus\SoundTouch\Request\SetVolumeRequest;
 use \Sabinus\SoundTouch\Component\Info;
 use \Sabinus\SoundTouch\Component\NowPlaying;
+use \Sabinus\SoundTouch\Component\Volume;
 
 
 class SoundTouchApi
@@ -40,22 +43,59 @@ class SoundTouchApi
     /**
      * Retourne les infos de l'enceinte
      * 
-     * @return InfoResponse
+     * @return Info
      */
     public function getInfo()
     {
-        return new Info( $this->client->request( new GetInfoRequest() ) );
+        return new Info( $this->client->request( new GetInfoRequest() ));
     }
 
 
     /**
      * Retourne le statut en cours de l'enceinte
      * 
-     * @return InfoResponse
+     * @return NowPlaying
      */
     public function getNowPlaying()
     {
-        return new NowPlaying( $this->client->request( new GetNowPlayingRequest() ) );
+        return new NowPlaying( $this->client->request( new GetNowPlayingRequest() ));
+    }
+
+
+    /**
+     * Retourne le volume de l'enceinte
+     * 
+     * @return Volume
+     */
+    public function getVolume()
+    {
+        return new Volume( $this->client->request( new GetVolumeRequest() ));
+    }
+
+    
+    /**
+     * Affecte le pourcentage de volume de l'enceinte
+     * 
+     * @param Integer $volume
+     * @return Response
+     */
+    public function setVolume($volume)
+    {
+        $request = new SetVolumeRequest();
+        $request->setVolume( $volume );
+        return $this->client->request( $request );
+    }
+
+
+    /**
+     * Retourne le niveau de volume
+     * 
+     * @return Integer
+     */
+    public function getLevelVolume()
+    {
+        $volume = new Volume( $this->client->request( new GetVolumeRequest() ));
+        return $volume->getActual();
     }
 
 }
