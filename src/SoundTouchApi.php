@@ -34,4 +34,15 @@ class SoundTouchApi
         $this->client = new ClientApi($host);
     }
 
+    
+    /**
+     * Retourne les infos de l'enceinte
+     * 
+     * @return InfoResponse
+     */
+    public function getInfo()
+    {
+        return new Info( $this->client->request( new GetInfoRequest() ) );
+    }
+
 }
