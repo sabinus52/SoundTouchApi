@@ -1,6 +1,6 @@
 <?php
 /**
- * Contenu de la source
+ * Contenu de la source en cours
  *
  * @author Olivier <sabinus52@gmail.com>
  *

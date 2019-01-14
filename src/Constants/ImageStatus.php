@@ -1,6 +1,6 @@
 <?php
 /**
- * Constantes des statut des images
+ * Constantes des statuts des images
  *
  * @author Olivier <sabinus52@gmail.com>
  *
@@ -13,9 +13,9 @@ namespace Sabinus\SoundTouch\Constants;
 class ImageStatus
 {
 
-    const INVALID = "INVALID";
-    const SHOW_DEFAULT_IMAGE = "SHOW_DEFAULT_IMAGE";
-    const DOWNLOADING = "DOWNLOADING";
-    const IMAGE_PRESENT = "IMAGE_PRESENT";
+    const INVALID            = 'INVALID';
+    const SHOW_DEFAULT_IMAGE = 'SHOW_DEFAULT_IMAGE';
+    const DOWNLOADING        = 'DOWNLOADING';
+    const IMAGE_PRESENT      = 'IMAGE_PRESENT';
 
 }

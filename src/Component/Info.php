@@ -9,6 +9,8 @@
 
 namespace Sabinus\SoundTouch\Component;
 
+use Sabinus\SoundTouch\Component\Network;
+
 
 class Info
 {
@@ -53,7 +55,7 @@ class Info
 
     /**
      * @return String
-     **/
+     */
     public function getName()
     {
         return $this->name;
@@ -61,7 +63,7 @@ class Info
 
     /**
      * @return String
-     **/
+     */
     public function getType()
     {
         return $this->type;
@@ -69,7 +71,7 @@ class Info
 
     /**
      * @return String
-     **/
+     */
     public function getAccount()
     {
         return $this->account;
@@ -77,7 +79,7 @@ class Info
 
     /**
      * @return Network
-     **/
+     */
     public function getNetwork()
     {
         return $this->network;
@@ -85,7 +87,7 @@ class Info
 
     /**
      * @return String
-     **/
+     */
     public function getModuleType()
     {
         return $this->moduleType;
@@ -93,7 +95,7 @@ class Info
 
     /**
      * @return String
-     **/
+     */
     public function getVariant()
     {
         return $this->variant;
@@ -101,7 +103,7 @@ class Info
 
     /**
      * @return String
-     **/
+     */
     public function getVariantMode()
     {
         return $this->variantMode;
@@ -109,7 +111,7 @@ class Info
 
     /**
      * @return String
-     **/
+     */
     public function getCountryCode()
     {
         return $this->countryCode;
@@ -117,7 +119,7 @@ class Info
 
     /**
      * @return String
-     **/
+     */
     public function getRegionCode()
     {
         return $this->regionCode;
