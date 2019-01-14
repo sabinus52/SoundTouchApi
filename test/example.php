@@ -39,11 +39,18 @@ print 'Station location : '.$result->getStationLocation()."\n";
 print "\n";
 
 // Volume
-$result = $api->getVolume();
+/*$result = $api->getVolume();
 print '--- Volume ---------------------------------------------------------------------------------'."\n";
 print 'Actuel : '.$result->getActual()."\n";
 print 'Cible : '.$result->getTarget()."\n";
 print 'Mute : '.$result->isMuted()."\n";
 $api->setVolume(27);
 $result = $api->getVolume();
-print 'Volume à 27 : '.$result->getActual()."\n";
+print 'Volume à 27 : '.$result->getActual()."\n";*/
+
+// Liste sources
+$result = $api->getSources();
+print '--- Sources --------------------------------------------------------------------------------'."\n";
+foreach ($result as $key => $source) {
+    print $key.' : '.$source->getName().' / '.$source->getSource().' - '.$source->getStatus().' ('.($source->getIsLocal() ? 'local' : '').')'."\n";
+}
