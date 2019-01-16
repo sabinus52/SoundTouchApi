@@ -54,3 +54,11 @@ print '--- Sources -------------------------------------------------------------
 foreach ($result as $key => $source) {
     print $key.' : '.$source->getName().' / '.$source->getSource().' - '.$source->getStatus().' ('.($source->getIsLocal() ? 'local' : '').')'."\n";
 }
+
+// Préselections
+$result = $api->getPresets();
+print '--- Présélections --------------------------------------------------------------------------'."\n";
+foreach ($result as $preset) {
+    print $preset->getId().' : '.$preset->getCreatedOn()->format('Y-m-d').'/'.$preset->getUpdatedOn()->format('Y-m-d');
+    print ' - '.$preset->getContentItem()->getSource().' : '.$preset->getContentItem()->getName()."\n";
+}
