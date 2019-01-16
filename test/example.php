@@ -65,3 +65,6 @@ foreach ($result as $preset) {
     print $preset->getId().' : '.$preset->getCreatedOn()->format('Y-m-d').'/'.$preset->getUpdatedOn()->format('Y-m-d');
     print ' - '.$preset->getContentItem()->getSource().' : '.$preset->getContentItem()->getName()."\n";
 }
+
+// Test envoi commande touche
+$api->sendCommand( \Sabinus\SoundTouch\Constants\KEY::VOLUME_DOWN );

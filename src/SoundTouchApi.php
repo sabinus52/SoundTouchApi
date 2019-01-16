@@ -16,6 +16,7 @@ use \Sabinus\SoundTouch\Request\SetVolumeRequest;
 use \Sabinus\SoundTouch\Request\GetSourcesRequest;
 use \Sabinus\SoundTouch\Request\GetPresetsRequest;
 use \Sabinus\SoundTouch\Request\SetNameRequest;
+use \Sabinus\SoundTouch\Request\SetKeyRequest;
 use \Sabinus\SoundTouch\Component\Info;
 use \Sabinus\SoundTouch\Component\NowPlaying;
 use \Sabinus\SoundTouch\Component\Volume;
@@ -136,6 +137,23 @@ class SoundTouchApi
         $request->setName( $name );
         return $this->client->request( $request );
     }
+
+
+    /**
+     * Envoie une commande de touche à l'enceinte
+     * 
+     * @param String $key
+     * @return Response
+     */
+    public function setKey($key)
+    {
+        $request = new SetKeyRequest();
+        $request->setKey( $key )->setState( SetKeyRequest::PRESS );
+        $result = $this->client->request( $request );
+        $request->setKey( $key )->setState( SetKeyRequest::RELEASE );
+        return $this->client->request( $request );
+    }
+    public function sendCommand($key) { return $this->setKey($key); }
 
 
     /**
