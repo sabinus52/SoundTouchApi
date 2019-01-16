@@ -15,6 +15,7 @@ use \Sabinus\SoundTouch\Request\GetVolumeRequest;
 use \Sabinus\SoundTouch\Request\SetVolumeRequest;
 use \Sabinus\SoundTouch\Request\GetSourcesRequest;
 use \Sabinus\SoundTouch\Request\GetPresetsRequest;
+use \Sabinus\SoundTouch\Request\SetNameRequest;
 use \Sabinus\SoundTouch\Component\Info;
 use \Sabinus\SoundTouch\Component\NowPlaying;
 use \Sabinus\SoundTouch\Component\Volume;
@@ -120,6 +121,20 @@ class SoundTouchApi
             $result[] = new Preset( $node );
         }
         return $result;
+    }
+
+
+    /**
+     * Affecte un nouveau nom à l'enceinte
+     * 
+     * @param String $name
+     * @return Response
+     */
+    public function setName($name)
+    {
+        $request = new SetNameRequest();
+        $request->setName( $name );
+        return $this->client->request( $request );
     }
 
 

@@ -6,6 +6,9 @@ use Sabinus\SoundTouch\SoundTouchApi;
 
 $api = new SoundTouchApi('soundtouch');
 
+// Changement nom
+//$api->setName('SoundTouch 300');
+
 // Info
 $result = $api->getInfo();
 print '--- Informations ---------------------------------------------------------------------------'."\n";
