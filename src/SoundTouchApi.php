@@ -14,10 +14,12 @@ use \Sabinus\SoundTouch\Request\GetNowPlayingRequest;
 use \Sabinus\SoundTouch\Request\GetVolumeRequest;
 use \Sabinus\SoundTouch\Request\SetVolumeRequest;
 use \Sabinus\SoundTouch\Request\GetSourcesRequest;
+use \Sabinus\SoundTouch\Request\GetPresetsRequest;
 use \Sabinus\SoundTouch\Component\Info;
 use \Sabinus\SoundTouch\Component\NowPlaying;
 use \Sabinus\SoundTouch\Component\Volume;
 use \Sabinus\SoundTouch\Component\SourceItem;
+use \Sabinus\SoundTouch\Component\Preset;
 
 
 class SoundTouchApi
@@ -100,6 +102,22 @@ class SoundTouchApi
         $xml = $this->client->request( new GetSourcesRequest() );
         foreach ($xml->sourceItem as $node) {
             $result[] = new SourceItem( $node );
+        }
+        return $result;
+    }
+
+
+    /**
+     * Retourne la liste des préselections
+     * 
+     * @return Array of Preset
+     */
+    public function getPresets()
+    {
+        $result = array();
+        $xml = $this->client->request( new GetPresetsRequest() );
+        foreach ($xml->preset as $node) {
+            $result[] = new Preset( $node );
         }
         return $result;
     }
