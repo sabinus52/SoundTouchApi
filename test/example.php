@@ -49,7 +49,8 @@ print 'Cible : '.$result->getTarget()."\n";
 print 'Mute : '.$result->isMuted()."\n";
 $api->setVolume(27);
 $result = $api->getVolume();
-print 'Volume à 27 : '.$result->getActual()."\n";*/
+print 'Volume à 27 : '.$result->getActual()."\n";
+print "\n";*/
 
 // Liste sources
 $result = $api->getSources();
@@ -57,6 +58,7 @@ print '--- Sources -------------------------------------------------------------
 foreach ($result as $key => $source) {
     print $key.' : '.$source->getName().' / '.$source->getSource().' - '.$source->getStatus().' ('.($source->getIsLocal() ? 'local' : '').')'."\n";
 }
+print "\n";
 
 // Préselections
 $result = $api->getPresets();
@@ -65,6 +67,7 @@ foreach ($result as $preset) {
     print $preset->getId().' : '.$preset->getCreatedOn()->format('Y-m-d').'/'.$preset->getUpdatedOn()->format('Y-m-d');
     print ' - '.$preset->getContentItem()->getSource().' : '.$preset->getContentItem()->getName()."\n";
 }
+print "\n";
 
 // Test envoi commande touche
 //api->sendCommand( \Sabinus\SoundTouch\Constants\KEY::VOLUME_DOWN );
@@ -75,3 +78,9 @@ print '--- Bass ----------------------------------------------------------------
 print 'Actuel : '.$result->getActual()."\n";
 print 'Cible : '.$result->getTarget()."\n";
 $api->setBass(0);
+$result = $api->getBassCapabilities();
+print 'BassC Dispo : '.$result->getAvailable()."\n";
+print 'BassC Min : '.$result->getMin()."\n";
+print 'BassC Max : '.$result->getMax()."\n";
+print 'BassC Default : '.$result->getDefault()."\n";
+print "\n";
