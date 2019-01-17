@@ -67,4 +67,11 @@ foreach ($result as $preset) {
 }
 
 // Test envoi commande touche
-$api->sendCommand( \Sabinus\SoundTouch\Constants\KEY::VOLUME_DOWN );
+//api->sendCommand( \Sabinus\SoundTouch\Constants\KEY::VOLUME_DOWN );
+
+// Basse
+$result = $api->getBass();
+print '--- Bass -----------------------------------------------------------------------------------'."\n";
+print 'Actuel : '.$result->getActual()."\n";
+print 'Cible : '.$result->getTarget()."\n";
+$api->setBass(0);

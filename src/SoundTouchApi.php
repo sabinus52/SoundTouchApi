@@ -17,11 +17,14 @@ use \Sabinus\SoundTouch\Request\GetSourcesRequest;
 use \Sabinus\SoundTouch\Request\GetPresetsRequest;
 use \Sabinus\SoundTouch\Request\SetNameRequest;
 use \Sabinus\SoundTouch\Request\SetKeyRequest;
+use \Sabinus\SoundTouch\Request\GetBassRequest;
+use \Sabinus\SoundTouch\Request\SetBassRequest;
 use \Sabinus\SoundTouch\Component\Info;
 use \Sabinus\SoundTouch\Component\NowPlaying;
 use \Sabinus\SoundTouch\Component\Volume;
 use \Sabinus\SoundTouch\Component\SourceItem;
 use \Sabinus\SoundTouch\Component\Preset;
+use \Sabinus\SoundTouch\Component\Bass;
 
 
 class SoundTouchApi
@@ -154,6 +157,31 @@ class SoundTouchApi
         return $this->client->request( $request );
     }
     public function sendCommand($key) { return $this->setKey($key); }
+
+
+    /**
+     * Retourne les basses de l'enceinte
+     * 
+     * @return Bass
+     */
+    public function getBass()
+    {
+        return new Bass( $this->client->request( new GetBassRequest() ));
+    }
+
+    
+    /**
+     * Affecte le basses de l'enceinte
+     * 
+     * @param Integer $bass
+     * @return Response
+     */
+    public function setBass($bass)
+    {
+        $request = new SetBassRequest();
+        $request->setBass( $bass );
+        return $this->client->request( $request );
+    }
 
 
     /**
