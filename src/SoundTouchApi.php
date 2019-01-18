@@ -20,6 +20,9 @@ use \Sabinus\SoundTouch\Request\SetKeyRequest;
 use \Sabinus\SoundTouch\Request\GetBassRequest;
 use \Sabinus\SoundTouch\Request\SetBassRequest;
 use \Sabinus\SoundTouch\Request\GetBassCapabilitiesRequest;
+use \Sabinus\SoundTouch\Request\SetZoneRequest;
+use \Sabinus\SoundTouch\Request\SetAddZoneRequest;
+use \Sabinus\SoundTouch\Request\SetRemoveZoneRequest;
 use \Sabinus\SoundTouch\Component\Info;
 use \Sabinus\SoundTouch\Component\NowPlaying;
 use \Sabinus\SoundTouch\Component\Volume;
@@ -27,6 +30,7 @@ use \Sabinus\SoundTouch\Component\SourceItem;
 use \Sabinus\SoundTouch\Component\Preset;
 use \Sabinus\SoundTouch\Component\Bass;
 use \Sabinus\SoundTouch\Component\BassCapabilities;
+use \Sabinus\SoundTouch\Component\Zone;
 
 
 class SoundTouchApi
@@ -194,6 +198,59 @@ class SoundTouchApi
     public function getBassCapabilities()
     {
         return new BassCapabilities( $this->client->request( new GetBassCapabilitiesRequest() ));
+    }
+
+
+    /**
+     * Retourne la zone MultiRoom de l'enceinte
+     * 
+     * @return Zone
+     */
+    public function getZone()
+    {
+        return new Zone( $this->client->request( new GetZoneRequest() ));
+    }
+
+
+    /**
+     * Affecte la zone MultiRoom de l'enceinte
+     * 
+     * @param Zone $Zone
+     * @return Response
+     */
+    public function setZone(Zone $zone)
+    {
+        $request = new SetZoneRequest();
+        $request->setZone( $zone );
+        return $this->client->request( $request );
+    }
+
+
+    /**
+     * Ajoute un slave à la zone MultiRoom de l'enceinte
+     * 
+     * @param Zone $Zone
+     * @return Response
+     */
+    public function addZoneSlave(Zone $zone)
+    {
+        $request = new SetAddZoneRequest();
+        $request->setZone( $zone );
+        return $this->client->request( $request );
+    }
+
+
+    /**
+     * Enlève un slave à la zone MultiRoom de l'enceinte
+     * 
+     * @param Zone $Zone
+     * @return Response
+     */
+    public function removeZoneSlave(Zone $zone)
+    {
+        $request = new SetRemoveZoneRequest();
+        $request->setZone( $zone );
+        return $this->client->request( $request );
     }
 
 
