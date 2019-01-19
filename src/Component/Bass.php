@@ -9,6 +9,8 @@
 
 namespace Sabinus\SoundTouch\Component;
 
+use \SimpleXMLElement;
+
 
 class Bass
 {
@@ -21,29 +23,44 @@ class Bass
     /**
      * Contructeur
      * 
-     * @param SimpleXMLElement $xml : Xml de la réponse
+     * @param SimpleXMLElement|Integer $data
      */
-    public function __construct($xml)
+    public function __construct($data = null)
     {
-        $this->actual = intval($xml->actualbass);
-        $this->target = intval($xml->targetbass);
+        if ( $data instanceof SimpleXMLElement ) {
+            $this->actual = intval($data->actualbass);
+            $this->target = intval($data->targetbass);
+        } else {
+            $this->target = intval($data);
+        }
     }
 
 
     /**
-     * @return String
+     * @return Integer
      */
     public function getActual()
     {
         return $this->actual;
     }
 
+
     /**
-     * @return String
+     * @return Integer
      */
     public function getTarget()
     {
         return $this->target;
+    }
+
+    /**
+     * @var Integer $value
+     * @return Bass
+     */
+    public function setTarget($value)
+    {
+        $this->target = intval($value);
+        return $this;
     }
    
 }

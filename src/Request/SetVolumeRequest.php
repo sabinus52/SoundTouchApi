@@ -10,12 +10,17 @@
 namespace Sabinus\SoundTouch\Request;
 
 use Sabinus\SoundTouch\ClientApi;
+use Sabinus\SoundTouch\Component\Volume;
 
 
 class SetVolumeRequest extends RequestAbstract implements RequestInterface
 {
 
+    /**
+     * @var Volume
+     */
     private $volume;
+    
     
     /**
      * @see RequestAbstract::__construct
@@ -30,7 +35,7 @@ class SetVolumeRequest extends RequestAbstract implements RequestInterface
      */
     public function getPayload()
     {
-        return '<volume>' . $this->volume . '</volume>';
+        return '<volume>' . $this->volume->getTarget() . '</volume>';
     }
 
     /**
@@ -45,12 +50,12 @@ class SetVolumeRequest extends RequestAbstract implements RequestInterface
     /**
      * Affecte un volume
      * 
-     * @param Integer $volume
+     * @param Volume $volume
      * @return SetVolumeRequest
      */
-    public function setVolume($volume)
+    public function setVolume(Volume $volume)
     {
-        $this->volume = intval($volume);
+        $this->volume = $volume;
         return $this;
     }
 

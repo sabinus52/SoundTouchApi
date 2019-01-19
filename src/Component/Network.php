@@ -9,6 +9,8 @@
 
 namespace Sabinus\SoundTouch\Component;
 
+use \SimpleXMLElement;
+
 
 class Network
 {
@@ -23,7 +25,7 @@ class Network
      * 
      * @param SimpleXMLElement $xml : Xml de la réponse
      */
-    public function __construct($xml)
+    public function __construct(SimpleXMLElement $xml)
     {
         $this->macAddress = strval($xml->macAddress);
         $this->ipAddress = strval($xml->ipAddress);

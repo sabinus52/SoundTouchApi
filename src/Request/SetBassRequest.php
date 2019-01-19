@@ -10,11 +10,15 @@
 namespace Sabinus\SoundTouch\Request;
 
 use Sabinus\SoundTouch\ClientApi;
+use Sabinus\SoundTouch\Component\Bass;
 
 
 class SetBassRequest extends RequestAbstract implements RequestInterface
 {
 
+    /**
+     * @var Bass
+     */
     private $bass;
     
     
@@ -31,7 +35,7 @@ class SetBassRequest extends RequestAbstract implements RequestInterface
      */
     public function getPayload()
     {
-        return '<bass>' . $this->bass . '</bass>';
+        return '<bass>' . $this->bass->getTarget() . '</bass>';
     }
 
     /**
@@ -46,12 +50,12 @@ class SetBassRequest extends RequestAbstract implements RequestInterface
     /**
      * Affecte des basses
      * 
-     * @param Integer $bass
+     * @param Bass $bass
      * @return SetBassRequest
      */
-    public function setBass($bass)
+    public function setBass(Bass $bass)
     {
-        $this->bass = intval($bass);
+        $this->bass = $bass;
         return $this;
     }
 
