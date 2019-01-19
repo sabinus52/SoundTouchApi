@@ -10,10 +10,13 @@
 namespace Sabinus\SoundTouch\Component;
 
 use Sabinus\SoundTouch\Component\Network;
+use \SimpleXMLElement;
 
 
 class Info
 {
+
+    private $deviceID;
 
     private $name;
 
@@ -39,8 +42,9 @@ class Info
      * 
      * @param SimpleXMLElement $xml : Xml de la réponse
      */
-    public function __construct($xml)
+    public function __construct(SimpleXMLElement $xml)
     {
+        $this->deviceID = strval($xml->attributes()->deviceID);
         $this->name = strval($xml->name);
         $this->type = strval($xml->type);
         $this->account = strval($xml->margeAccountUUID);
@@ -52,6 +56,14 @@ class Info
         $this->regionCode = strval($xml->regionCode);
     }
 
+
+    /**
+     * @return String
+     */
+    public function getDeviceID()
+    {
+        return $this->deviceID;
+    }
 
     /**
      * @return String

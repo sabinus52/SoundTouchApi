@@ -3,7 +3,6 @@
 require 'bootstrap.php';
 
 use Sabinus\SoundTouch\SoundTouchApi;
-use Sabinus\SoundTouch\Component\ContentItem;
 
 $api = new SoundTouchApi('soundtouch');
 
@@ -86,6 +85,7 @@ print 'BassC Max : '.$result->getMax()."\n";
 print 'BassC Default : '.$result->getDefault()."\n";
 print "\n";
 
+
 // Selection source
 $source = new ContentItem();
 $source->setSource('BLUETOOTH');
@@ -95,3 +95,15 @@ $source->setSource('BLUETOOTH');
 //$source->setType('stationurl');
 //$source->setLocation('/v1/playback/station/s17695');
 $api->selectSource($source);
+
+// Zone
+$result = $api->getZone();
+print '--- Zone -----------------------------------------------------------------------------------'."\n";
+
+$zone = new Zone();
+$zone->setMaster('ABCD123456')->setSender('192.168.0.0');
+$slave1 = new ZoneSlave();
+$slave1->setMacAddress('111ABCDEF')->setIpAddress('192.168.0.1');
+$slave2 = new ZoneSlave();
+$slave2->setMacAddress('222ABCDEF')->setIpAddress('192.168.0.2');
+$zone->setSlaves( [ $slave1, $slave2 ] );

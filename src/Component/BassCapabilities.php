@@ -29,10 +29,10 @@ class BassCapabilities
      */
     public function __construct($xml)
     {
-        $this->actual = ($xml->bassAvailable == 'false') ? false : true;
-        $this->target = intval($xml->bassMin);
-        $this->target = intval($xml->bassMax);
-        $this->target = intval($xml->bassDefault);
+        if ($xml->bassAvailable) $this->available = ($xml->bassAvailable == 'false') ? false : true;
+        $this->min = intval($xml->bassMin);
+        $this->max = intval($xml->bassMax);
+        $this->default = intval($xml->bassDefault);
     }
 
 

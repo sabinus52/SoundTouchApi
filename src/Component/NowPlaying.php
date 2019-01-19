@@ -10,7 +10,8 @@
 namespace Sabinus\SoundTouch\Component;
 
 use Sabinus\SoundTouch\Component\ContentItem;
-use \Sabinus\SoundTouch\Constants\ImageStatus;
+use Sabinus\SoundTouch\Constants\ImageStatus;
+use \SimpleXMLElement;
 
 
 class NowPlaying
@@ -23,8 +24,6 @@ class NowPlaying
     const BUFFERING = 'BUFFERING_STATE';
     const INVALID   = 'INVALID_PLAY_STATUS';
 
-
-    private $deviceID;
 
     private $source;
 
@@ -66,20 +65,19 @@ class NowPlaying
      * 
      * @param SimpleXMLElement $xml : Xml de la réponse
      */
-    public function __construct($xml)
+    public function __construct(SimpleXMLElement $xml)
     {
-        $this->deviceID = strval($xml->attributes()->deviceID);
         $this->source = strval($xml->attributes()->source);
-        //if ( $this->objectXml->ContentItem ) {
+        if ( $xml->ContentItem ) {
             $this->contentItem = new ContentItem($xml->ContentItem);
-        //}
+        }
         $this->track = strval($xml->track);
         $this->artist = strval($xml->artist);
         $this->album = strval($xml->album);
         if ($xml->art) {
             $imgStatus = strval($xml->art->attributes()->artImageStatus);
             if ($imgStatus == ImageStatus::IMAGE_PRESENT) {
-                $image = strval($xml->art->attributes()->artImageStatus);
+                $this->image = strval($xml->art);
             }
         }
         if ($xml->time) {
@@ -97,14 +95,6 @@ class NowPlaying
         $this->trackID = intval($xml->trackID);
     }
 
-
-    /**
-     * @return String
-     */
-    public function getDeviceID()
-    {
-        return $this->deviceID;
-    }
 
     /**
      * @return String

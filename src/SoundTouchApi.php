@@ -80,31 +80,6 @@ class SoundTouchApi
 
 
     /**
-     * Retourne le volume de l'enceinte
-     * 
-     * @return Volume
-     */
-    public function getVolume()
-    {
-        return new Volume( $this->client->request( new GetVolumeRequest() ));
-    }
-
-    
-    /**
-     * Affecte le pourcentage de volume de l'enceinte
-     * 
-     * @param Integer $volume
-     * @return Response
-     */
-    public function setVolume($volume)
-    {
-        $request = new SetVolumeRequest();
-        $request->setVolume( $volume );
-        return $this->client->request( $request );
-    }
-
-
-    /**
      * Retourne la liste des sources
      * 
      * @return Array of SourceItem
@@ -132,6 +107,50 @@ class SoundTouchApi
         $request->setSource( $source );
         return $this->client->request( $request );
     }
+
+
+    /**
+     * Envoie une commande de touche à l'enceinte
+     * 
+     * @param String $key
+     * @return Response
+     */
+    public function setKey($key)
+    {
+        $request = new SetKeyRequest();
+        $request->setKey( $key )->setState( SetKeyRequest::PRESS );
+        $result = $this->client->request( $request );
+        $request->setKey( $key )->setState( SetKeyRequest::RELEASE );
+        return $this->client->request( $request );
+    }
+    public function sendCommand($key) { return $this->setKey($key); }
+
+
+    /**
+     * Retourne le volume de l'enceinte
+     * 
+     * @return Volume
+     */
+    public function getVolume()
+    {
+        return new Volume( $this->client->request( new GetVolumeRequest() ));
+    }
+
+    
+    /**
+     * Affecte le pourcentage de volume de l'enceinte
+     * 
+     * @param Integer $value
+     * @return Response
+     */
+    public function setVolume($value)
+    {
+        $request = new SetVolumeRequest();
+        $volume = new Volume( $value );
+        $request->setVolume( $volume );
+        return $this->client->request( $request );
+    }
+
 
 
     /**
@@ -165,23 +184,6 @@ class SoundTouchApi
 
 
     /**
-     * Envoie une commande de touche à l'enceinte
-     * 
-     * @param String $key
-     * @return Response
-     */
-    public function setKey($key)
-    {
-        $request = new SetKeyRequest();
-        $request->setKey( $key )->setState( SetKeyRequest::PRESS );
-        $result = $this->client->request( $request );
-        $request->setKey( $key )->setState( SetKeyRequest::RELEASE );
-        return $this->client->request( $request );
-    }
-    public function sendCommand($key) { return $this->setKey($key); }
-
-
-    /**
      * Retourne les basses de l'enceinte
      * 
      * @return Bass
@@ -195,12 +197,13 @@ class SoundTouchApi
     /**
      * Affecte le basses de l'enceinte
      * 
-     * @param Integer $bass
+     * @param Integer $value
      * @return Response
      */
-    public function setBass($bass)
+    public function setBass($value)
     {
         $request = new SetBassRequest();
+        $volume = new Bass( $value );
         $request->setBass( $bass );
         return $this->client->request( $request );
     }
@@ -245,13 +248,16 @@ class SoundTouchApi
     /**
      * Ajoute un slave à la zone MultiRoom de l'enceinte
      * 
-     * @param Zone $Zone
+     * @param ZoneSlave $slave
      * @return Response
      */
-    public function addZoneSlave(Zone $zone)
+    public function addZoneSlave(ZoneSlave $slave)
     {
+        $info = $this->getInfo();
         $request = new SetAddZoneRequest();
-        $request->setZone( $zone );
+        $request
+            ->setDeviceID( $info->getDeviceID() )
+            ->setSlave( $slave );
         return $this->client->request( $request );
     }
 
@@ -259,13 +265,16 @@ class SoundTouchApi
     /**
      * Enlève un slave à la zone MultiRoom de l'enceinte
      * 
-     * @param Zone $Zone
+     * @param ZoneSlave $slave
      * @return Response
      */
-    public function removeZoneSlave(Zone $zone)
+    public function removeZoneSlave(ZoneSlave $slave)
     {
+        $info = $this->getInfo();
         $request = new SetRemoveZoneRequest();
-        $request->setZone( $zone );
+        $request
+            ->setDeviceID( $info->getDeviceID() )
+            ->setSlave( $slave );
         return $this->client->request( $request );
     }
 
