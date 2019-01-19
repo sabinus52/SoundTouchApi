@@ -3,6 +3,7 @@
 require 'bootstrap.php';
 
 use Sabinus\SoundTouch\SoundTouchApi;
+use Sabinus\SoundTouch\Component\ContentItem;
 
 $api = new SoundTouchApi('soundtouch');
 
@@ -84,3 +85,13 @@ print 'BassC Min : '.$result->getMin()."\n";
 print 'BassC Max : '.$result->getMax()."\n";
 print 'BassC Default : '.$result->getDefault()."\n";
 print "\n";
+
+// Selection source
+$source = new ContentItem();
+$source->setSource('BLUETOOTH');
+//$source->setSource('PRODUCT');
+//$source->setAccount('HDMI_1');
+//$source->setSource('TUNEIN');
+//$source->setType('stationurl');
+//$source->setLocation('/v1/playback/station/s17695');
+$api->selectSource($source);

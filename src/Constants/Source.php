@@ -1,6 +1,6 @@
 <?php
 /**
- * Constantes des type de sources des images
+ * Constantes des type de sources
  *
  * @author Olivier <sabinus52@gmail.com>
  *
@@ -29,5 +29,6 @@ class Source
     const IHEART            = 'IHEART';
     const LOCAL_MUSIC       = 'LOCAL_MUSIC';
     const BLUETOOTH         = 'BLUETOOTH';
+    const PRODUCT           = 'PRODUCT';
 
 }
