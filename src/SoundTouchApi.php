@@ -14,6 +14,7 @@ use \Sabinus\SoundTouch\Request\GetNowPlayingRequest;
 use \Sabinus\SoundTouch\Request\GetVolumeRequest;
 use \Sabinus\SoundTouch\Request\SetVolumeRequest;
 use \Sabinus\SoundTouch\Request\GetSourcesRequest;
+use \Sabinus\SoundTouch\Request\SetSelectRequest;
 use \Sabinus\SoundTouch\Request\GetPresetsRequest;
 use \Sabinus\SoundTouch\Request\SetNameRequest;
 use \Sabinus\SoundTouch\Request\SetKeyRequest;
@@ -26,6 +27,7 @@ use \Sabinus\SoundTouch\Request\SetRemoveZoneRequest;
 use \Sabinus\SoundTouch\Component\Info;
 use \Sabinus\SoundTouch\Component\NowPlaying;
 use \Sabinus\SoundTouch\Component\Volume;
+use \Sabinus\SoundTouch\Component\ContentItem;
 use \Sabinus\SoundTouch\Component\SourceItem;
 use \Sabinus\SoundTouch\Component\Preset;
 use \Sabinus\SoundTouch\Component\Bass;
@@ -115,6 +117,20 @@ class SoundTouchApi
             $result[] = new SourceItem( $node );
         }
         return $result;
+    }
+
+
+    /**
+     * Selectionne et active une source de l'enceinte
+     * 
+     * @param ContentItem $source
+     * @return Response
+     */
+    public function selectSource(ContentItem $source)
+    {
+        $request = new SetSelectRequest();
+        $request->setSource( $source );
+        return $this->client->request( $request );
     }
 
 
