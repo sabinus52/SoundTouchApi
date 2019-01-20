@@ -17,14 +17,16 @@ class BassCapabilitiesTest extends TestCase
 
     public function testConstruct()
     {
-        $response = new Response('<?xml version="1.0" encoding="UTF-8" ?>
+        $response = new Response();
+        $response->parseContent('<?xml version="1.0" encoding="UTF-8" ?>
         <bassCapabilities deviceID="ABCD123456">
             <bassAvailable>false</bassAvailable>
             <bassMin>-9</bassMin>
             <bassMax>9</bassMax>
             <bassDefault>1</bassDefault>
         </bassCapabilities>');
-        $obj = new BassCapabilities($response->getXml());
+        $obj = new BassCapabilities();
+        $obj->setResponse($response->getXml());
         $this->assertFalse($obj->getAvailable());
         $this->assertSame(-9, $obj->getMin());
         $this->assertSame(9, $obj->getMax());
@@ -34,8 +36,10 @@ class BassCapabilitiesTest extends TestCase
 
     public function testConstructNull()
     {
-        $response = new Response('<?xml version="1.0" encoding="UTF-8" ?><bassCapabilities deviceID="ABCD123456"></bassCapabilities>');
-        $obj = new BassCapabilities($response->getXml());
+        $response = new Response();
+        $response->parseContent('<?xml version="1.0" encoding="UTF-8" ?><bassCapabilities deviceID="ABCD123456"></bassCapabilities>');
+        $obj = new BassCapabilities();
+        $obj->setResponse($response->getXml());
         $this->assertEmpty($obj->getAvailable());
         $this->assertEmpty($obj->getMin());
         $this->assertEmpty($obj->getMax());

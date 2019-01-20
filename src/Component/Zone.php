@@ -25,17 +25,24 @@ class Zone
     /**
      * Contructeur
      * 
-     * @param SimpleXMLElement|String $data
+     * @param String $master
      */
-    public function __construct($data = null)
+    public function __construct($master = null)
     {
-        if ( $data instanceof SimpleXMLElement ) {
-            $this->master = strval($data->attributes()->master);
-            foreach ($data->member as $member) {
-                $this->slaves[] = new ZoneSlave($member);
-            }
-        } else {
-            $this->master = $data;
+        if ($master) $this->master = $master;
+    }
+
+
+    /**
+     * Affecte la réponse de la requête
+     * 
+     * @param SimpleXMLElement $xml : Xml de la réponse
+     */
+    public function setResponse(SimpleXMLElement $xml)
+    {
+        $this->master = strval($xml->attributes()->master);
+        foreach ($xml->member as $member) {
+            $this->slaves[] = new ZoneSlave($member);
         }
     }
 

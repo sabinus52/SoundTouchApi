@@ -18,13 +18,15 @@ class VolumeTest extends TestCase
     
     public function testConstruct()
     {
-        $response = new Response('<?xml version="1.0" encoding="UTF-8" ?>
+        $response = new Response();
+        $response->parseContent('<?xml version="1.0" encoding="UTF-8" ?>
         <volume deviceID="2C6B7D5EC886">
             <targetvolume>27</targetvolume>
             <actualvolume>27</actualvolume>
             <muteenabled>false</muteenabled>
         </volume>');
-        $obj = new Volume($response->getXml());
+        $obj = new Volume();
+        $obj->setResponse($response->getXml());
         $this->assertSame(27, $obj->getActual());
         $this->assertSame(27, $obj->getTarget());
         $this->assertFalse($obj->isMuted());
@@ -33,8 +35,10 @@ class VolumeTest extends TestCase
 
     public function testConstructNull()
     {
-        $response = new Response('<?xml version="1.0" encoding="UTF-8" ?><volume deviceID="2C6B7D5EC886"></volume>');
-        $obj = new Volume($response->getXml());
+        $response = new Response();
+        $response->parseContent('<?xml version="1.0" encoding="UTF-8" ?><volume deviceID="2C6B7D5EC886"></volume>');
+        $obj = new Volume();
+        $obj->setResponse($response->getXml());
         $this->assertEmpty($obj->getActual());
         $this->assertEmpty($obj->getTarget());
         $this->assertEmpty($obj->isMuted());

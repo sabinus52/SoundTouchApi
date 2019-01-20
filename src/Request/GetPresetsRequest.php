@@ -10,6 +10,7 @@
 namespace Sabinus\SoundTouch\Request;
 
 use Sabinus\SoundTouch\ClientApi;
+use Sabinus\SoundTouch\Component\Presets;
 
 
 class GetPresetsRequest extends RequestAbstract implements RequestInterface
@@ -34,9 +35,9 @@ class GetPresetsRequest extends RequestAbstract implements RequestInterface
     /**
      * @see RequestInterface
      */
-    public function getClass()
+    public function createClass()
     {
-        return 'Presets';
+        return new Presets();
     }
 
 }

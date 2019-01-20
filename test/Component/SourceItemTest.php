@@ -10,17 +10,19 @@
 use PHPUnit\Framework\TestCase;
 use Sabinus\SoundTouch\Response;
 use Sabinus\SoundTouch\Component\SourceItem;
+use Sabinus\SoundTouch\Component\Sources;
 
 
 class SourceItemTest extends TestCase
 {
     
-    protected $xml;
+    protected $sources;
 
 
     protected function setUp()
     {
-        $response = new Response('<?xml version="1.0" encoding="UTF-8" ?>
+        $response = new Response();
+        $response->parseContent('<?xml version="1.0" encoding="UTF-8" ?>
         <sources deviceID="2C6B7D5EC886">
             <sourceItem source="DEEZER" sourceAccount="toto@gmail.com" status="READY" isLocal="false" multiroomallowed="true">toto@gmail.com</sourceItem>
             <sourceItem source="BLUETOOTH" status="UNAVAILABLE" isLocal="true" multiroomallowed="true" />
@@ -28,13 +30,15 @@ class SourceItemTest extends TestCase
             <sourceItem source="PRODUCT" sourceAccount="TV" status="READY" isLocal="true" multiroomallowed="true">TV</sourceItem>
             <sourceItem source="TUNEIN" status="READY" isLocal="false" multiroomallowed="true" />
         </sources>');
-        $this->xml = $response->getXml();
+        $sources = new Sources();
+        $sources->setResponse($response->getXml());
+        $this->sources = $sources->getSources();
     }
 
 
     public function testConstructDeezer()
     {   
-        $obj = new SourceItem($this->xml->sourceItem[0]);
+        $obj = $this->sources[0];
         $this->assertSame('toto@gmail.com', $obj->getName());
         $this->assertSame('DEEZER', $obj->getSource());
         $this->assertSame('toto@gmail.com', $obj->getAccount());
@@ -46,7 +50,7 @@ class SourceItemTest extends TestCase
 
     public function testConstructBluetooth()
     {   
-        $obj = new SourceItem($this->xml->sourceItem[1]);
+        $obj = $this->sources[1];
         $this->assertSame('BLUETOOTH', $obj->getName());
         $this->assertSame('BLUETOOTH', $obj->getSource());
         $this->assertEmpty($obj->getAccount());
@@ -58,7 +62,7 @@ class SourceItemTest extends TestCase
 
     public function testConstructSpotify()
     {   
-        $obj = new SourceItem($this->xml->sourceItem[2]);
+        $obj = $this->sources[2];
         $this->assertSame('SPOTIFY', $obj->getName());
         $this->assertSame('SPOTIFY', $obj->getSource());
         $this->assertEmpty($obj->getAccount());
@@ -70,7 +74,7 @@ class SourceItemTest extends TestCase
 
     public function testConstructProduct()
     {   
-        $obj = new SourceItem($this->xml->sourceItem[3]);
+        $obj = $this->sources[3];
         $this->assertSame('TV', $obj->getName());
         $this->assertSame('PRODUCT', $obj->getSource());
         $this->assertSame('TV', $obj->getAccount());
@@ -82,7 +86,7 @@ class SourceItemTest extends TestCase
 
     public function testConstructTuneIn()
     {   
-        $obj = new SourceItem($this->xml->sourceItem[4]);
+        $obj = $this->sources[4];
         $this->assertSame('TUNEIN', $obj->getName());
         $this->assertSame('TUNEIN', $obj->getSource());
         $this->assertEmpty($obj->getAccount());

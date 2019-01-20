@@ -21,12 +21,14 @@ class ZoneTest extends TestCase
     
     public function testConstruct()
     {
-        $response = new Response('<?xml version="1.0" encoding="UTF-8" ?>
+        $response = new Response();
+        $response->parseContent('<?xml version="1.0" encoding="UTF-8" ?>
         <zone master="ABCD123456">
             <member ipaddress="192.168.0.1">111ABCDEF</member>
             <member ipaddress="192.168.0.2">222ABCDEF</member>
         </zone>');
-        $obj = new Zone($response->getXml());
+        $obj = new Zone();
+        $obj->setResponse($response->getXml());
         $this->assertSame('ABCD123456', $obj->getMaster());
         $slaves = $obj->getSlaves();
         $this->assertSame('111ABCDEF', $slaves[0]->getMacAddress());
@@ -38,8 +40,10 @@ class ZoneTest extends TestCase
 
     public function testConstructNull()
     {
-        $response = new Response('<?xml version="1.0" encoding="UTF-8" ?><zone master="ABCD123456"></zone>');
-        $obj = new Zone($response->getXml());
+        $response = new Response();
+        $response->parseContent('<?xml version="1.0" encoding="UTF-8" ?><zone master="ABCD123456"></zone>');
+        $obj = new Zone();
+        $obj->setResponse($response->getXml());
         $this->assertSame('ABCD123456', $obj->getMaster());
         $this->assertEmpty($obj->getSlaves());
     }

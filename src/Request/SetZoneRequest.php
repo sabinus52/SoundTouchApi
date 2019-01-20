@@ -46,7 +46,7 @@ class SetZoneRequest extends RequestAbstract implements RequestInterface
     /**
      * @see RequestInterface
      */
-    public function getClass()
+    public function createClass()
     {
         return null;
     }

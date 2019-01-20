@@ -30,7 +30,7 @@ interface RequestInterface
      *
      * @return String
      */
-    public function getClass();
+    public function createClass();
 
 }
 

@@ -10,17 +10,19 @@
 use PHPUnit\Framework\TestCase;
 use Sabinus\SoundTouch\Response;
 use Sabinus\SoundTouch\Component\Preset;
+use Sabinus\SoundTouch\Component\Presets;
 
 
 class PresetTest extends TestCase
 {
     
-    protected $xml;
+    protected $presets;
 
 
     protected function setUp()
     {
-        $response = new Response('<?xml version="1.0" encoding="UTF-8" ?>
+        $response = new Response();
+        $response->parseContent('<?xml version="1.0" encoding="UTF-8" ?>
         <presets>
             <preset id="1" createdOn="1543927979" updatedOn="1543927980">
                 <ContentItem source="TUNEIN" type="stationurl" location="/v1/playback/station/s6616" sourceAccount="" isPresetable="true">
@@ -36,13 +38,15 @@ class PresetTest extends TestCase
             </preset>
             <preset id="3" createdOn="1546713728" updatedOn="1546713728"/>
         </presets>');
-        $this->xml = $response->getXml();
+        $presets = new Presets();
+        $presets->setResponse($response->getXml());
+        $this->presets = $presets->getPresets();
     }
 
 
     public function testConstructPreset1()
     {   
-        $obj = new Preset($this->xml->preset[0]);
+        $obj = $this->presets[0];
         $this->assertSame(1, $obj->getId());
         $this->assertSame('2018-12-04 12:52:59', $obj->getCreatedOn()->format('Y-m-d H:i:s'));
         $this->assertSame('2018-12-04 12:53:00', $obj->getUpdatedOn()->format('Y-m-d H:i:s'));
@@ -58,7 +62,7 @@ class PresetTest extends TestCase
 
     public function testConstructPreset2()
     {   
-        $obj = new Preset($this->xml->preset[1]);
+        $obj = $this->presets[1];
         $this->assertSame(2, $obj->getId());
         $this->assertSame('2019-01-05 18:42:09', $obj->getCreatedOn()->format('Y-m-d H:i:s'));
         $this->assertSame('2019-01-05 18:42:10', $obj->getUpdatedOn()->format('Y-m-d H:i:s'));
@@ -74,7 +78,7 @@ class PresetTest extends TestCase
 
     public function testConstructPreset3()
     {   
-        $obj = new Preset($this->xml->preset[2]);
+        $obj = $this->presets[2];
         $this->assertSame(3, $obj->getId());
         $this->assertSame('2019-01-05 18:42:08', $obj->getCreatedOn()->format('Y-m-d H:i:s'));
         $this->assertSame('2019-01-05 18:42:08', $obj->getUpdatedOn()->format('Y-m-d H:i:s'));

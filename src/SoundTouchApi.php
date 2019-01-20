@@ -29,8 +29,10 @@ use \Sabinus\SoundTouch\Component\Info;
 use \Sabinus\SoundTouch\Component\NowPlaying;
 use \Sabinus\SoundTouch\Component\Volume;
 use \Sabinus\SoundTouch\Component\ContentItem;
+use \Sabinus\SoundTouch\Component\Sources;
 use \Sabinus\SoundTouch\Component\SourceItem;
 use \Sabinus\SoundTouch\Component\Preset;
+use \Sabinus\SoundTouch\Component\Presets;
 use \Sabinus\SoundTouch\Component\Bass;
 use \Sabinus\SoundTouch\Component\BassCapabilities;
 use \Sabinus\SoundTouch\Component\Zone;
@@ -57,6 +59,17 @@ class SoundTouchApi
         $this->client = new ClientApi($host);
     }
 
+
+    /**
+     * Retourne le message d'erreru
+     * 
+     * @return String
+     */
+    public function getMessageError()
+    {
+        return $this->client->getMessageError();
+    }
+
     
     /**
      * Retourne les infos de l'enceinte
@@ -65,7 +78,7 @@ class SoundTouchApi
      */
     public function getInfo()
     {
-        return new Info( $this->client->request( new GetInfoRequest() ));
+        return $this->client->request( new GetInfoRequest() );
     }
 
 
@@ -76,23 +89,18 @@ class SoundTouchApi
      */
     public function getNowPlaying()
     {
-        return new NowPlaying( $this->client->request( new GetNowPlayingRequest() ));
+        return $this->client->request( new GetNowPlayingRequest() );
     }
 
 
     /**
      * Retourne la liste des sources
      * 
-     * @return Array of SourceItem
+     * @return Sources
      */
     public function getSources()
     {
-        $result = array();
-        $xml = $this->client->request( new GetSourcesRequest() );
-        foreach ($xml->sourceItem as $node) {
-            $result[] = new SourceItem( $node );
-        }
-        return $result;
+        return $this->client->request( new GetSourcesRequest() )->getSources();
     }
 
 
@@ -121,6 +129,7 @@ class SoundTouchApi
         $request = new SetKeyRequest();
         $request->setKey( $key )->setState( SetKeyRequest::PRESS );
         $result = $this->client->request( $request );
+        if (!$result) return false;
         $request->setKey( $key )->setState( SetKeyRequest::RELEASE );
         return $this->client->request( $request );
     }
@@ -133,7 +142,7 @@ class SoundTouchApi
      */
     public function getVolume()
     {
-        return new Volume( $this->client->request( new GetVolumeRequest() ));
+        return $this->client->request( new GetVolumeRequest() );
     }
 
     
@@ -156,16 +165,11 @@ class SoundTouchApi
     /**
      * Retourne la liste des préselections
      * 
-     * @return Array of Preset
+     * @return Presets
      */
     public function getPresets()
     {
-        $result = array();
-        $xml = $this->client->request( new GetPresetsRequest() );
-        foreach ($xml->preset as $node) {
-            $result[] = new Preset( $node );
-        }
-        return $result;
+        return $this->client->request( new GetPresetsRequest() )->getPresets();
     }
 
 
@@ -190,7 +194,7 @@ class SoundTouchApi
      */
     public function getBass()
     {
-        return new Bass( $this->client->request( new GetBassRequest() ));
+        return $this->client->request( new GetBassRequest() );
     }
 
     
@@ -216,7 +220,7 @@ class SoundTouchApi
      */
     public function getBassCapabilities()
     {
-        return new BassCapabilities( $this->client->request( new GetBassCapabilitiesRequest() ));
+        return $this->client->request( new GetBassCapabilitiesRequest() );
     }
 
 
@@ -227,7 +231,7 @@ class SoundTouchApi
      */
     public function getZone()
     {
-        return new Zone( $this->client->request( new GetZoneRequest() ));
+        return $this->client->request( new GetZoneRequest() );
     }
 
 

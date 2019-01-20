@@ -17,11 +17,13 @@ class NowPlayingTest extends TestCase
 
     public function testConstructStandBy()
     {
-        $response = new Response('<?xml version="1.0" encoding="UTF-8" ?>
+        $response = new Response();
+        $response->parseContent('<?xml version="1.0" encoding="UTF-8" ?>
         <nowPlaying deviceID="ABCD123456" source="STANDBY">
             <ContentItem source="STANDBY" isPresetable="false" />
         </nowPlaying>');
-        $obj = new NowPlaying($response->getXml());
+        $obj = new NowPlaying();
+        $obj->setResponse($response->getXml());
         $this->assertSame('STANDBY', $obj->getSource());
         $this->assertEmpty($obj->getContentItem()->getName());
         $this->assertEmpty($obj->getContentItem()->getImage());
@@ -50,13 +52,15 @@ class NowPlayingTest extends TestCase
 
     public function testConstructTV()
     {
-        $response = new Response('<?xml version="1.0" encoding="UTF-8" ?>
+        $response = new Response();
+        $response->parseContent('<?xml version="1.0" encoding="UTF-8" ?>
         <nowPlaying deviceID="2C6B7D5EC886" source="PRODUCT" sourceAccount="TV">
             <ContentItem source="PRODUCT" sourceAccount="TV" isPresetable="false"/>
             <art artImageStatus="SHOW_DEFAULT_IMAGE"/>
             <playStatus>PLAY_STATE</playStatus>
         </nowPlaying>');
-        $obj = new NowPlaying($response->getXml());
+        $obj = new NowPlaying();
+        $obj->setResponse($response->getXml());
         $this->assertSame('PRODUCT', $obj->getSource());
         $this->assertEmpty($obj->getContentItem()->getName());
         $this->assertEmpty($obj->getContentItem()->getImage());
@@ -85,7 +89,8 @@ class NowPlayingTest extends TestCase
 
     public function testConstructBluetooth()
     {
-        $response = new Response('<?xml version="1.0" encoding="UTF-8" ?>
+        $response = new Response();
+        $response->parseContent('<?xml version="1.0" encoding="UTF-8" ?>
         <nowPlaying deviceID="2C6B7D5EC886" source="BLUETOOTH" sourceAccount="">
             <ContentItem source="BLUETOOTH" location="" sourceAccount="" isPresetable="false">
                 <itemName>Android XX</itemName>
@@ -101,7 +106,8 @@ class NowPlayingTest extends TestCase
             <genre/>
             <connectionStatusInfo status="CONNECTED" deviceName="Android XX"/>
         </nowPlaying>');
-        $obj = new NowPlaying($response->getXml());
+        $obj = new NowPlaying();
+        $obj->setResponse($response->getXml());
         $this->assertSame('BLUETOOTH', $obj->getSource());
         $this->assertSame('Android XX', $obj->getContentItem()->getName());
         $this->assertEmpty($obj->getContentItem()->getImage());
@@ -129,7 +135,8 @@ class NowPlayingTest extends TestCase
 
     public function testConstructTuneIn()
     {
-        $response = new Response('<?xml version="1.0" encoding="UTF-8" ?>
+        $response = new Response();
+        $response->parseContent('<?xml version="1.0" encoding="UTF-8" ?>
         <nowPlaying deviceID="2C6B7D5EC886" source="TUNEIN" sourceAccount="">
             <ContentItem source="TUNEIN" type="stationurl" location="/v1/playback/station/s6616" sourceAccount="" isPresetable="true">
                 <itemName>RFM</itemName>
@@ -145,7 +152,8 @@ class NowPlayingTest extends TestCase
             <streamType>RADIO_STREAMING</streamType>
             <isFavorite/>
         </nowPlaying>');
-        $obj = new NowPlaying($response->getXml());
+        $obj = new NowPlaying();
+        $obj->setResponse($response->getXml());
         $this->assertSame('TUNEIN', $obj->getSource());
         $this->assertSame('RFM', $obj->getContentItem()->getName());
         $this->assertSame('http://cdn-radiotime-logos.tunein.com/s6616q.png', $obj->getContentItem()->getImage());
@@ -174,7 +182,8 @@ class NowPlayingTest extends TestCase
 
     public function testConstructDeezer()
     {
-        $response = new Response('<?xml version="1.0" encoding="UTF-8" ?>
+        $response = new Response();
+        $response->parseContent('<?xml version="1.0" encoding="UTF-8" ?>
         <nowPlaying deviceID="2C6B7D5EC886" source="DEEZER" sourceAccount="toto@gmail.com">
             <ContentItem source="DEEZER" type="playlist" location="123456789" sourceAccount="toto@gmail.com" isPresetable="true">
                 <itemName>Best Of 80 à moi</itemName>
@@ -196,7 +205,8 @@ class NowPlayingTest extends TestCase
             <artistID>545</artistID>
             <trackID>68514297</trackID>
         </nowPlaying>');
-        $obj = new NowPlaying($response->getXml());
+        $obj = new NowPlaying();
+        $obj->setResponse($response->getXml());
         $this->assertSame('DEEZER', $obj->getSource());
         $this->assertSame('Best Of 80 à moi', $obj->getContentItem()->getName());
         $this->assertSame('http://e-cdn-images.deezer.com/images/cover/0-0.jpg', $obj->getContentItem()->getImage());
@@ -225,8 +235,10 @@ class NowPlayingTest extends TestCase
 
     public function testConstructNull()
     {
-        $response = new Response('<?xml version="1.0" encoding="UTF-8" ?><nowPlaying></nowPlaying>');
-        $obj = new NowPlaying($response->getXml());
+        $response = new Response();
+        $response->parseContent('<?xml version="1.0" encoding="UTF-8" ?><nowPlaying></nowPlaying>');
+        $obj = new NowPlaying();
+        $obj->setResponse($response->getXml());
         $this->assertEmpty($obj->getSource());
         $this->assertEmpty($obj->getContentItem());
         $this->assertEmpty($obj->getTrack());
