@@ -9,6 +9,7 @@
 
 namespace Sabinus\SoundTouch;
 
+use \Sabinus\SoundTouch\Constants\Key;
 use \Sabinus\SoundTouch\Request\GetInfoRequest;
 use \Sabinus\SoundTouch\Request\GetNowPlayingRequest;
 use \Sabinus\SoundTouch\Request\GetVolumeRequest;
@@ -123,7 +124,6 @@ class SoundTouchApi
         $request->setKey( $key )->setState( SetKeyRequest::RELEASE );
         return $this->client->request( $request );
     }
-    public function sendCommand($key) { return $this->setKey($key); }
 
 
     /**
@@ -279,15 +279,37 @@ class SoundTouchApi
     }
 
 
-    /**
-     * Retourne le niveau de volume
-     * 
-     * @return Integer
-     */
-    public function getLevelVolume()
-    {
-        $volume = new Volume( $this->client->request( new GetVolumeRequest() ));
-        return $volume->getActual();
-    }
+   
+    // ### Raccourci Commandes ####################################################################
+
+    public function mute() { return $this->setKey(Key::MUTE); }
+
+    public function upVolume() { return $this->setKey(Key::VOLUME_UP); }
+
+    public function downVolume() { return $this->setKey(Key::VOLUME_DOWN); }
+
+    public function nextTrack() { return $this->setKey(Key::NEXT_TRACK); }
+
+    public function previousTrack() { return $this->setKey(Key::PREV_TRACK); }
+
+    public function pause() { return $this->setKey(Key::PAUSE); }
+
+    public function play() { return $this->setKey(Key::PLAY); }
+
+    public function stop() { return $this->setKey(Key::STOP); }
+
+    public function playPause() { return $this->setKey(Key::PLAY_PAUSE); }
+
+    public function repeatOff() { return $this->setKey(Key::REPEAT_OFF); }
+
+    public function repeatOne() { return $this->setKey(Key::REPEAT_ONE); }
+
+    public function repeatAll() { return $this->setKey(Key::REPEAT_ALL); }
+
+    public function shuffleOn() { return $this->setKey(Key::SHUFFLE_ON); }
+
+    public function shuffleOff() { return $this->setKey(Key::SHUFFLE_OFF); }
+
+    public function power() { return $this->setKey(Key::POWER); }
 
 }
