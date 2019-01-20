@@ -10,6 +10,7 @@
 namespace Sabinus\SoundTouch\Request;
 
 use Sabinus\SoundTouch\ClientApi;
+use Sabinus\SoundTouch\Component\BassCapabilities;
 
 
 class GetBassCapabilitiesRequest extends RequestAbstract implements RequestInterface
@@ -34,9 +35,9 @@ class GetBassCapabilitiesRequest extends RequestAbstract implements RequestInter
     /**
      * @see RequestInterface
      */
-    public function getClass()
+    public function createClass()
     {
-        return 'BassCapabilities';
+        return new BassCapabilities();
     }
 
 }

@@ -10,10 +10,11 @@
 namespace Sabinus\SoundTouch;
 
 use GuzzleHttp\Client;
+use GuzzleHttp\Psr7;
 use GuzzleHttp\Psr7\Uri;
 use GuzzleHttp\Psr7\UriResolver;
+use GuzzleHttp\Exception\RequestException;
 use Sabinus\SoundTouch\Request\RequestInterface;
-
 
 
 class ClientApi
@@ -38,7 +39,14 @@ class ClientApi
      */
     private $client;
 
-    
+    /**
+     * Message d'erreur éventuel
+     * 
+     * @var String
+     */
+    private $msgError;
+
+
     /**
      * Constructeur
      * 
@@ -53,37 +61,115 @@ class ClientApi
         ));
     }
 
-    
+
+    /**
+     * Retourne le message d'erreur
+     * 
+     * @return String
+     */
+    public function getMessageError()
+    {
+        return $this->msgError;
+    }
+
+
     /**
      * Envoi de la requête à l'enceinte
      * 
      * @param RequestInterface $request : Objet de la requête
-     * @return Response
-     * @throws
+     * @return Mixed
      */
     public function request(RequestInterface $request)
     {
+        $this->msgError = '';
         $uri = new Uri($request->getUri());
 
-        // TODO : gestion exception
         switch ($request->getMethod()) {
             case self::METHOD_GET:
-                $result = $this->client->get($uri);
-                break;
+                return $this->get($uri, $request);
             
             case self::METHOD_POST:
-                $result = $this->client->post($uri, array('body' => $request->getPayload()));
-                break;
+                return $this->post($uri, $request->getPayload());
             
             default:
-                // TODO gestion erreur
-                # code...
-                break;
+                $this->msgError = 'Bad Method Request';
+                return false;
         }
-        
-        $response = new Response($result->getBody()->getContents());
+    }
 
-        return $response->getXML();
+
+    /**
+     * Envoie une requête ave la méthode GET
+     * 
+     * @param Uri $uri
+     * @param RequestInterface $request
+     * @return Boolean
+     * @throws
+     */
+    private function get($uri, RequestInterface $request)
+    {
+        $response = new Response();
+
+        try {
+        
+            $result = $this->client->get($uri);
+        
+        } catch (RequestException $e) {
+        
+            //$this->msgError = Psr7\str($e->getRequest());
+            $this->msgError = 'Error on the request : /'.$uri;
+            if ($e->hasResponse()) {
+                //$this->msgError.= "\nERR:".Psr7\str($e->getResponse());
+                $response->parseContent($e->getResponse()->getBody());
+                $this->msgError.= "\n".$response->getMessageError();
+            }
+            return false;
+        }
+
+        // Parse la réponse
+        $response->parseContent($result->getBody()->getContents());
+        if ( ! $response->isSuccess() ) {
+            $this->msgError = $response->getMessageError();
+            return false;
+        }
+        // Retourne l'objet et affecte le contenu dans l'objet créer
+        $obj = $request->createClass();
+        $obj->setResponse($response->getXML());
+        return $obj;
+    }
+
+
+    /**
+     * Envoie une requête ave la méthode POST
+     * 
+     * @param Uri $uri
+     * @param String $payload
+     * @return Boolean
+     * @throws
+     */
+    private function post($uri, $payload)
+    {
+        $response = new Response();
+
+        try {
+        
+            $result = $this->client->post($uri, array('body' => $payload));
+
+        } catch (RequestException $e) {
+
+            //$this->msgError = Psr7\str($e->getRequest());
+            $this->msgError = 'Error on the request : /'.$uri;
+            if ($e->hasResponse()) {
+                //$this->msgError.= "\nERR:".Psr7\str($e->getResponse());
+                $response->parseContent($e->getResponse()->getBody());
+                $this->msgError.= "\n".$response->getMessageError();
+            }
+            return false;
+        }
+
+        // Parse le contenu pour vérifier s'il n'y a pas d'erreur
+        $response->parseContent($result->getBody()->getContents());
+        return $response->isSuccess();
     }
 
 }

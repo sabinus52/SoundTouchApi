@@ -9,6 +9,8 @@
 
 namespace Sabinus\SoundTouch\Component;
 
+use \SimpleXMLElement;
+
 
 class BassCapabilities
 {
@@ -23,11 +25,11 @@ class BassCapabilities
 
 
     /**
-     * Contructeur
+     * Affecte la réponse de la requête
      * 
      * @param SimpleXMLElement $xml : Xml de la réponse
      */
-    public function __construct($xml)
+    public function setResponse(SimpleXMLElement $xml)
     {
         if ($xml->bassAvailable) $this->available = ($xml->bassAvailable == 'false') ? false : true;
         $this->min = intval($xml->bassMin);

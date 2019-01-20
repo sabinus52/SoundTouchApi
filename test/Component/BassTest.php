@@ -18,12 +18,14 @@ class BassTest extends TestCase
     
     public function testConstruct()
     {
-        $response = new Response('<?xml version="1.0" encoding="UTF-8" ?>
+        $response = new Response();
+        $response->parseContent('<?xml version="1.0" encoding="UTF-8" ?>
         <bass deviceID="2C6B7D5EC886">
             <targetbass>-1</targetbass>
             <actualbass>1</actualbass>
         </bass>');
-        $obj = new Bass($response->getXml());
+        $obj = new Bass();
+        $obj->setResponse($response->getXml());
         $this->assertSame(1, $obj->getActual());
         $this->assertSame(-1, $obj->getTarget());
     }
@@ -31,8 +33,10 @@ class BassTest extends TestCase
 
     public function testConstructNull()
     {
-        $response = new Response('<?xml version="1.0" encoding="UTF-8" ?><bass deviceID="2C6B7D5EC886"></bass>');
-        $obj = new Bass($response->getXml());
+        $response = new Response();
+        $response->parseContent('<?xml version="1.0" encoding="UTF-8" ?><bass deviceID="2C6B7D5EC886"></bass>');
+        $obj = new Bass();
+        $obj->setResponse($response->getXml());
         $this->assertEmpty($obj->getActual());
         $this->assertEmpty($obj->getTarget());
     }

@@ -10,6 +10,7 @@
 namespace Sabinus\SoundTouch\Request;
 
 use Sabinus\SoundTouch\ClientApi;
+use Sabinus\SoundTouch\Component\Sources;
 
 
 class GetSourcesRequest extends RequestAbstract implements RequestInterface
@@ -34,9 +35,9 @@ class GetSourcesRequest extends RequestAbstract implements RequestInterface
     /**
      * @see RequestInterface
      */
-    public function getClass()
+    public function createClass()
     {
-        return 'Sources';
+        return new Sources();
     }
 
 }

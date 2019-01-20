@@ -61,11 +61,11 @@ class NowPlaying
 
 
     /**
-     * Contructeur
+     * Affecte la réponse de la requête
      * 
      * @param SimpleXMLElement $xml : Xml de la réponse
      */
-    public function __construct(SimpleXMLElement $xml)
+    public function setResponse(SimpleXMLElement $xml)
     {
         $this->source = strval($xml->attributes()->source);
         if ( $xml->ContentItem ) {

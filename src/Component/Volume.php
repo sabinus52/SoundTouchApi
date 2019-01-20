@@ -25,17 +25,24 @@ class Volume
     /**
      * Contructeur
      * 
-     * @param SimpleXMLElement|Integer $data
+     * @param Integer $value
      */
-    public function __construct($data = null)
+    public function __construct($value = null)
     {
-        if ( $data instanceof SimpleXMLElement ) {
-            $this->actual = intval($data->actualvolume);
-            $this->target = intval($data->targetvolume);
-            if ($data->muteenabled) $this->muted = ($data->muteenabled == 'false') ? false : true;
-        } else {
-            $this->target = intval($data);
-        }
+        $this->target = intval($value);
+    }
+
+
+    /**
+     * Affecte la réponse de la requête
+     * 
+     * @param SimpleXMLElement $xml : Xml de la réponse
+     */
+    public function setResponse(SimpleXMLElement $xml)
+    {
+        $this->actual = intval($xml->actualvolume);
+        $this->target = intval($xml->targetvolume);
+        if ($xml->muteenabled) $this->muted = ($xml->muteenabled == 'false') ? false : true;
     }
 
 
