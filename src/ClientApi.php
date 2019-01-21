@@ -14,6 +14,7 @@ use GuzzleHttp\Psr7;
 use GuzzleHttp\Psr7\Uri;
 use GuzzleHttp\Psr7\UriResolver;
 use GuzzleHttp\Exception\RequestException;
+use Sabinus\SoundTouch\SoundTouchCache;
 use Sabinus\SoundTouch\Request\RequestInterface;
 
 
@@ -48,6 +49,22 @@ class ClientApi
 
 
     /**
+     * Si cache activé
+     * 
+     * @var Boolean
+     */
+    private $isCached;
+
+
+    /**
+     * Objet du cache
+     * 
+     * @var SoundTouchCache
+     */
+    private $cache;
+
+
+    /**
      * Constructeur
      * 
      * @param String $host
@@ -59,6 +76,8 @@ class ClientApi
             'connect_timeout' => 2.0,
             'timeout' => 2.0,
         ));
+        $this->isCached = false;
+        $this->cache = new SoundTouchCache();
     }
 
 
@@ -70,6 +89,17 @@ class ClientApi
     public function getMessageError()
     {
         return $this->msgError;
+    }
+
+
+    /**
+     * Active ou pas le cache
+     * 
+     * @param Boolean $cache
+     */
+    public function setCached($cache)
+    {
+        $this->isCached = $cache;
     }
 
 
@@ -106,10 +136,14 @@ class ClientApi
      * @return Boolean
      * @throws
      */
-    private function get($uri, RequestInterface $request)
+    private function get(Uri $uri, RequestInterface $request)
     {
-        $response = new Response();
+        if ($this->isCached) {
+            $cache = $this->cache->getData(strval($uri));
+            if ($cache) return $cache;
+        }
 
+        $response = new Response();
         try {
         
             $result = $this->client->get($uri);
@@ -135,6 +169,7 @@ class ClientApi
         // Retourne l'objet et affecte le contenu dans l'objet créer
         $obj = $request->createClass();
         $obj->setResponse($response->getXML());
+        $this->cache->setData(strval($uri), $obj);
         return $obj;
     }
 
@@ -147,7 +182,7 @@ class ClientApi
      * @return Boolean
      * @throws
      */
-    private function post($uri, $payload)
+    private function post(Uri $uri, $payload)
     {
         $response = new Response();
 
