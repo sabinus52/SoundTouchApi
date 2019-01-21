@@ -53,10 +53,12 @@ class SoundTouchApi
      * Constructeur
      * 
      * @param String $host
+     * @param Boolean $isCached : Activation du cache ou pas
      */
-    public function __construct($host)
+    public function __construct($host, $isCached = false)
     {
         $this->client = new ClientApi($host);
+        $this->client->setCached($isCached);
     }
 
 
