@@ -53,7 +53,7 @@ class ClientApi
      * 
      * @var Boolean
      */
-    private $isCached;
+    private $isCacheEnabled;
 
 
     /**
@@ -76,7 +76,7 @@ class ClientApi
             'connect_timeout' => 2.0,
             'timeout' => 2.0,
         ));
-        $this->isCached = false;
+        $this->isCacheEnabled = false;
         $this->cache = new SoundTouchCache();
     }
 
@@ -99,7 +99,7 @@ class ClientApi
      */
     public function setCached($cache)
     {
-        $this->isCached = $cache;
+        $this->isCacheEnabled = $cache;
     }
 
 
@@ -138,7 +138,7 @@ class ClientApi
      */
     private function get(Uri $uri, RequestInterface $request)
     {
-        if ($this->isCached) {
+        if ($this->isCacheEnabled && !$request->isRefreshCache()) {
             $cache = $this->cache->getData(strval($uri));
             if ($cache) return $cache;
         }

@@ -19,9 +19,9 @@ class GetBassRequest extends RequestAbstract implements RequestInterface
     /**
      * @see RequestAbstract::__construct
      */
-    public function __construct()
+    public function __construct($refresh = false)
     {
-        parent::__construct(ClientApi::METHOD_GET, 'bass');
+        parent::__construct(ClientApi::METHOD_GET, 'bass', $refresh);
     }
 
     /**

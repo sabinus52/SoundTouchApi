@@ -16,7 +16,7 @@ interface RequestInterface
     /**
      * Constructeur
      */
-    public function __construct();
+    public function __construct($refresh);
 
     /**
      * Retourne le corps à envoyer dans la requête
