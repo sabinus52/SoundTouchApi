@@ -19,9 +19,9 @@ class GetVolumeRequest extends RequestAbstract implements RequestInterface
     /**
      * @see RequestAbstract::__construct
      */
-    public function __construct()
+    public function __construct($refresh = false)
     {
-        parent::__construct(ClientApi::METHOD_GET, 'volume');
+        parent::__construct(ClientApi::METHOD_GET, 'volume', $refresh);
     }
 
     /**

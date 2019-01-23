@@ -19,9 +19,9 @@ class GetInfoRequest extends RequestAbstract implements RequestInterface
     /**
      * @see RequestAbstract::__construct
      */
-    public function __construct()
+    public function __construct($refresh = false)
     {
-        parent::__construct(ClientApi::METHOD_GET, 'info');
+        parent::__construct(ClientApi::METHOD_GET, 'info', $refresh);
     }
 
     /**

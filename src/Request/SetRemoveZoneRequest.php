@@ -27,9 +27,9 @@ class SetRemoveZoneRequest extends RequestAbstract implements RequestInterface
     /**
      * @see RequestAbstract::__construct
      */
-    public function __construct()
+    public function __construct($refresh = false)
     {
-        parent::__construct(ClientApi::METHOD_POST, 'removeZoneSlave');
+        parent::__construct(ClientApi::METHOD_POST, 'removeZoneSlave', $refresh);
     }
 
     /**

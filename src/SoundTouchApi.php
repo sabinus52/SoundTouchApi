@@ -46,7 +46,7 @@ class SoundTouchApi
      * 
      * @var ClientApi
      */
-    private $client;
+    protected $client;
 
 
     /**
@@ -78,9 +78,9 @@ class SoundTouchApi
      * 
      * @return Info
      */
-    public function getInfo()
+    public function getInfo($refresh = false)
     {
-        return $this->client->request( new GetInfoRequest() );
+        return $this->client->request( new GetInfoRequest($refresh) );
     }
 
 
@@ -89,9 +89,9 @@ class SoundTouchApi
      * 
      * @return NowPlaying
      */
-    public function getNowPlaying()
+    public function getNowPlaying($refresh = false)
     {
-        return $this->client->request( new GetNowPlayingRequest() );
+        return $this->client->request( new GetNowPlayingRequest($refresh) );
     }
 
 
@@ -100,9 +100,9 @@ class SoundTouchApi
      * 
      * @return Sources
      */
-    public function getSources()
+    public function getSources($refresh = false)
     {
-        return $this->client->request( new GetSourcesRequest() )->getSources();
+        return $this->client->request( new GetSourcesRequest($refresh) )->getSources();
     }
 
 
@@ -142,9 +142,9 @@ class SoundTouchApi
      * 
      * @return Volume
      */
-    public function getVolume()
+    public function getVolume($refresh = false)
     {
-        return $this->client->request( new GetVolumeRequest() );
+        return $this->client->request( new GetVolumeRequest($refresh) );
     }
 
     
@@ -169,9 +169,9 @@ class SoundTouchApi
      * 
      * @return Presets
      */
-    public function getPresets()
+    public function getPresets($refresh = false)
     {
-        return $this->client->request( new GetPresetsRequest() )->getPresets();
+        return $this->client->request( new GetPresetsRequest($refresh) )->getPresets();
     }
 
 
@@ -194,9 +194,9 @@ class SoundTouchApi
      * 
      * @return Bass
      */
-    public function getBass()
+    public function getBass($refresh = false)
     {
-        return $this->client->request( new GetBassRequest() );
+        return $this->client->request( new GetBassRequest($refresh) );
     }
 
     
@@ -220,9 +220,9 @@ class SoundTouchApi
      * 
      * @return BassCapabilities
      */
-    public function getBassCapabilities()
+    public function getBassCapabilities($refresh = false)
     {
-        return $this->client->request( new GetBassCapabilitiesRequest() );
+        return $this->client->request( new GetBassCapabilitiesRequest($refresh) );
     }
 
 
@@ -231,9 +231,9 @@ class SoundTouchApi
      * 
      * @return Zone
      */
-    public function getZone()
+    public function getZone($refresh = false)
     {
-        return $this->client->request( new GetZoneRequest() );
+        return $this->client->request( new GetZoneRequest($refresh) );
     }
 
 
