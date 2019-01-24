@@ -31,14 +31,22 @@ class Response
 
     /**
      * Contructeur
+     */
+    public function __construct()
+    {
+        $this->content = '';
+        $this->msgError = '';
+    }
+
+
+    /**
+     * Affecte et parse le contenu
      * 
      * @param String $content : Contenu brute de la réponse
      */
-    public function __construct($content)
+    public function parseContent($content)
     {
-        $this->content = $content;
-        $this->msgError = '';
-
+        $this->content = strval($content);
         $this->parse();
     }
 
@@ -56,15 +64,15 @@ class Response
 
         // Parse
         try {
-            $this->objectXml = new \SimpleXMLElement($this->content);
+            $this->objectXml = @new \SimpleXMLElement($this->content);
         } catch (\Exception $e) {
             $this->msgError = 'Format XML invalid';
             return;
         }
 
         // Si erreur, récupère la première
-        if ($this->objectXml->errors) {
-            foreach ($this->objectXml->errors as $error) {
+        if ($this->objectXml->error) {
+            foreach ($this->objectXml->error as $error) {
                 $this->msgError = strval($error);
                 break;
             }
@@ -80,6 +88,28 @@ class Response
     public function getXML()
     {
         return $this->objectXml;
+    }
+
+
+    /**
+     * Retourne si pas d'erreur
+     * 
+     * @return Boolean
+     */
+    public function isSuccess()
+    {
+        return ( empty($this->msgError) );
+    }
+
+
+    /**
+     * Retourne le message d'erreur
+     * 
+     * @return String
+     */
+    public function getMessageError()
+    {
+        return $this->msgError;
     }
 
 }

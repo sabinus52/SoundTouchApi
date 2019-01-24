@@ -27,9 +27,9 @@ class SetKeyRequest extends RequestAbstract implements RequestInterface
     /**
      * @see RequestAbstract::__construct
      */
-    public function __construct()
+    public function __construct($refresh = false)
     {
-        parent::__construct(ClientApi::METHOD_POST, 'key');
+        parent::__construct(ClientApi::METHOD_POST, 'key', $refresh);
     }
 
     /**
@@ -43,7 +43,7 @@ class SetKeyRequest extends RequestAbstract implements RequestInterface
     /**
      * @see RequestInterface
      */
-    public function getClass()
+    public function createClass()
     {
         return null;
     }

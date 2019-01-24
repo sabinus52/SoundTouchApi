@@ -9,8 +9,7 @@
 
 namespace Sabinus\SoundTouch\Component;
 
-use Sabinus\SoundTouch\Component\ContentItem;
-use \Sabinus\SoundTouch\Constants\ImageStatus;
+use \SimpleXMLElement;
 
 
 class Volume
@@ -26,26 +25,38 @@ class Volume
     /**
      * Contructeur
      * 
-     * @param SimpleXMLElement $xml : Xml de la réponse
+     * @param Integer $value
      */
-    public function __construct($xml)
+    public function __construct($value = null)
     {
-        $this->actual = intval($xml->actualvolume);
-        $this->target = intval($xml->targetvolume);
-        $this->muted = ($xml->muteenabled == 'false') ? false : true;
+        $this->target = intval($value);
     }
 
 
     /**
-     * @return String
+     * Affecte la réponse de la requête
+     * 
+     * @param SimpleXMLElement $xml : Xml de la réponse
+     */
+    public function setResponse(SimpleXMLElement $xml)
+    {
+        $this->actual = intval($xml->actualvolume);
+        $this->target = intval($xml->targetvolume);
+        if ($xml->muteenabled) $this->muted = ($xml->muteenabled == 'false') ? false : true;
+    }
+
+
+    /**
+     * @return Integer
      */
     public function getActual()
     {
         return $this->actual;
     }
 
+
     /**
-     * @return String
+     * @return Integer
      */
     public function getTarget()
     {
@@ -53,7 +64,18 @@ class Volume
     }
 
     /**
-     * @return ContentItem
+     * @var Integer $value
+     * @return Volume
+     */
+    public function setTarget($value)
+    {
+        $this->target = intval($value);
+        return $this;
+    }
+
+
+    /**
+     * @return Boolean
      */
     public function isMuted()
     {

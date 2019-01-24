@@ -10,6 +10,7 @@
 namespace Sabinus\SoundTouch\Request;
 
 use Sabinus\SoundTouch\ClientApi;
+use Sabinus\SoundTouch\Component\Zone;
 
 
 class GetZoneRequest extends RequestAbstract implements RequestInterface
@@ -18,9 +19,9 @@ class GetZoneRequest extends RequestAbstract implements RequestInterface
     /**
      * @see RequestAbstract::__construct
      */
-    public function __construct()
+    public function __construct($refresh = false)
     {
-        parent::__construct(ClientApi::METHOD_GET, 'getZone');
+        parent::__construct(ClientApi::METHOD_GET, 'getZone', $refresh);
     }
 
     /**
@@ -34,9 +35,9 @@ class GetZoneRequest extends RequestAbstract implements RequestInterface
     /**
      * @see RequestInterface
      */
-    public function getClass()
+    public function createClass()
     {
-        return 'Zone';
+        return new Zone();
     }
 
 }
