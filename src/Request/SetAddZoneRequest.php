@@ -10,24 +10,26 @@
 namespace Sabinus\SoundTouch\Request;
 
 use Sabinus\SoundTouch\ClientApi;
-use Sabinus\SoundTouch\Component\Zone;
+use Sabinus\SoundTouch\Component\ZoneSlave;
 
 
 class SetAddZoneRequest extends RequestAbstract implements RequestInterface
 {
 
     /**
-     * @var Zone
+     * @var ZoneSlave
      */
-    private $zone;
+    private $slave;
+
+    private $deviceID;
 
     
     /**
      * @see RequestAbstract::__construct
      */
-    public function __construct()
+    public function __construct($refresh = false)
     {
-        parent::__construct(ClientApi::METHOD_POST, 'addZoneSlave');
+        parent::__construct(ClientApi::METHOD_POST, 'addZoneSlave', $refresh);
     }
 
     /**
@@ -35,10 +37,8 @@ class SetAddZoneRequest extends RequestAbstract implements RequestInterface
      */
     public function getPayload()
     {
-        $result = '<zone master="' . $this->zone->getMaster() . '">';
-        foreach ($this->zone->getSlaves() as $slave) {
-            $result.= '<member ipaddress="' . $slave->getIpAddress() . '">' . $slave->getMacAddress() . '</member>';
-        }
+        $result = '<zone master="' . $this->deviceID . '">';
+        $result.= '<member ipaddress="' . $this->slave->getIpAddress() . '">' . $this->slave->getMacAddress() . '</member>';
         $result.= '</zone>';
         return $result;
     }
@@ -46,21 +46,34 @@ class SetAddZoneRequest extends RequestAbstract implements RequestInterface
     /**
      * @see RequestInterface
      */
-    public function getClass()
+    public function createClass()
     {
         return null;
     }
 
 
     /**
-     * Affecte une nouvelle zone
+     * Affecte l'ID du device
      * 
-     * @param Zone $zone
+     * @param String $master
      * @return SetZoneRequest
      */
-    public function setZone(Zone $zone)
+    public function setDeviceID($master)
     {
-        $this->zone = $zone;
+        $this->deviceID = $master;
+        return $this;
+    }
+
+
+    /**
+     * Affecte une esclave d'une zone
+     * 
+     * @param ZoneSlave $slave
+     * @return SetZoneRequest
+     */
+    public function setSlave(ZoneSlave $slave)
+    {
+        $this->slave = $slave;
         return $this;
     }
 

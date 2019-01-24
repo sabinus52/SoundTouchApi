@@ -25,9 +25,9 @@ class SetSelectRequest extends RequestAbstract implements RequestInterface
     /**
      * @see RequestAbstract::__construct
      */
-    public function __construct()
+    public function __construct($refresh = false)
     {
-        parent::__construct(ClientApi::METHOD_POST, 'select');
+        parent::__construct(ClientApi::METHOD_POST, 'select', $refresh);
     }
 
     /**
@@ -49,7 +49,7 @@ class SetSelectRequest extends RequestAbstract implements RequestInterface
     /**
      * @see RequestInterface
      */
-    public function getClass()
+    public function createClass()
     {
         return null;
     }

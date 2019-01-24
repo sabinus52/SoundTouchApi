@@ -30,15 +30,23 @@ abstract class RequestAbstract
 
 
     /**
+     * Force le chargement du cache
+     */
+    protected $refresh;
+
+
+    /**
      * Contructeur
      *
      * @param String $method : Méthode HTTP
      * @param String $uri : URI
+     * @param Boolean $refresh : refresh le cache
      */
-    public function __construct($method, $uri)
+    public function __construct($method, $uri, $refresh = false)
     {
         $this->method = $method;
         $this->uri = $uri;
+        $this->refresh = $refresh;
     }
 
 
@@ -85,6 +93,17 @@ abstract class RequestAbstract
     {
         $this->uri = $uri;
         return $this;
+    }
+
+
+    /**
+     * Si on doit rafraichir le cache
+     * 
+     * @return Boolean
+     */
+    public function isRefreshCache()
+    {
+        return $this->refresh;
     }
 
 }

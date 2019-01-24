@@ -9,6 +9,8 @@
 
 namespace Sabinus\SoundTouch\Component;
 
+use \SimpleXMLElement;
+
 
 class SourceItem
 {
@@ -36,7 +38,7 @@ class SourceItem
      * 
      * @param SimpleXMLElement $xml : Xml de la réponse
      */
-    public function __construct($xml)
+    public function __construct(SimpleXMLElement $xml)
     {
         $this->source = strval($xml->attributes()->source);
         $this->name = strval($xml);

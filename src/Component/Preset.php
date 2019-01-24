@@ -9,6 +9,8 @@
 
 namespace Sabinus\SoundTouch\Component;
 
+use \SimpleXMLElement;
+
 
 class Preset
 {
@@ -27,14 +29,16 @@ class Preset
      * 
      * @param SimpleXMLElement $xml : Xml de la réponse
      */
-    public function __construct($xml)
+    public function __construct(SimpleXMLElement $xml)
     {
         $this->id = intval($xml->attributes()->id);
         $this->createdOn = new \DateTime();
         $this->createdOn->setTimestamp(intval($xml->attributes()->createdOn));
         $this->updatedOn = new \DateTime();
         $this->updatedOn->setTimestamp(intval($xml->attributes()->updatedOn));
-        $this->contentItem = new ContentItem($xml->ContentItem);
+        if ( $xml->ContentItem ) {
+            $this->contentItem = new ContentItem($xml->ContentItem);
+        }
     }
 
 

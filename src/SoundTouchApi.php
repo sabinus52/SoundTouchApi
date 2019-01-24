@@ -9,6 +9,7 @@
 
 namespace Sabinus\SoundTouch;
 
+use \Sabinus\SoundTouch\Constants\Key;
 use \Sabinus\SoundTouch\Request\GetInfoRequest;
 use \Sabinus\SoundTouch\Request\GetNowPlayingRequest;
 use \Sabinus\SoundTouch\Request\GetVolumeRequest;
@@ -28,8 +29,10 @@ use \Sabinus\SoundTouch\Component\Info;
 use \Sabinus\SoundTouch\Component\NowPlaying;
 use \Sabinus\SoundTouch\Component\Volume;
 use \Sabinus\SoundTouch\Component\ContentItem;
+use \Sabinus\SoundTouch\Component\Sources;
 use \Sabinus\SoundTouch\Component\SourceItem;
 use \Sabinus\SoundTouch\Component\Preset;
+use \Sabinus\SoundTouch\Component\Presets;
 use \Sabinus\SoundTouch\Component\Bass;
 use \Sabinus\SoundTouch\Component\BassCapabilities;
 use \Sabinus\SoundTouch\Component\Zone;
@@ -43,17 +46,30 @@ class SoundTouchApi
      * 
      * @var ClientApi
      */
-    private $client;
+    protected $client;
 
 
     /**
      * Constructeur
      * 
      * @param String $host
+     * @param Boolean $isCached : Activation du cache ou pas
      */
-    public function __construct($host)
+    public function __construct($host, $isCached = false)
     {
         $this->client = new ClientApi($host);
+        $this->client->setCached($isCached);
+    }
+
+
+    /**
+     * Retourne le message d'erreru
+     * 
+     * @return String
+     */
+    public function getMessageError()
+    {
+        return $this->client->getMessageError();
     }
 
     
@@ -62,9 +78,9 @@ class SoundTouchApi
      * 
      * @return Info
      */
-    public function getInfo()
+    public function getInfo($refresh = false)
     {
-        return new Info( $this->client->request( new GetInfoRequest() ));
+        return $this->client->request( new GetInfoRequest($refresh) );
     }
 
 
@@ -73,50 +89,20 @@ class SoundTouchApi
      * 
      * @return NowPlaying
      */
-    public function getNowPlaying()
+    public function getNowPlaying($refresh = false)
     {
-        return new NowPlaying( $this->client->request( new GetNowPlayingRequest() ));
-    }
-
-
-    /**
-     * Retourne le volume de l'enceinte
-     * 
-     * @return Volume
-     */
-    public function getVolume()
-    {
-        return new Volume( $this->client->request( new GetVolumeRequest() ));
-    }
-
-    
-    /**
-     * Affecte le pourcentage de volume de l'enceinte
-     * 
-     * @param Integer $volume
-     * @return Response
-     */
-    public function setVolume($volume)
-    {
-        $request = new SetVolumeRequest();
-        $request->setVolume( $volume );
-        return $this->client->request( $request );
+        return $this->client->request( new GetNowPlayingRequest($refresh) );
     }
 
 
     /**
      * Retourne la liste des sources
      * 
-     * @return Array of SourceItem
+     * @return Sources
      */
-    public function getSources()
+    public function getSources($refresh = false)
     {
-        $result = array();
-        $xml = $this->client->request( new GetSourcesRequest() );
-        foreach ($xml->sourceItem as $node) {
-            $result[] = new SourceItem( $node );
-        }
-        return $result;
+        return $this->client->request( new GetSourcesRequest($refresh) )->getSources();
     }
 
 
@@ -135,18 +121,57 @@ class SoundTouchApi
 
 
     /**
+     * Envoie une commande de touche à l'enceinte
+     * 
+     * @param String $key
+     * @return Response
+     */
+    public function setKey($key)
+    {
+        $request = new SetKeyRequest();
+        $request->setKey( $key )->setState( SetKeyRequest::PRESS );
+        $result = $this->client->request( $request );
+        if (!$result) return false;
+        $request->setKey( $key )->setState( SetKeyRequest::RELEASE );
+        return $this->client->request( $request );
+    }
+
+
+    /**
+     * Retourne le volume de l'enceinte
+     * 
+     * @return Volume
+     */
+    public function getVolume($refresh = false)
+    {
+        return $this->client->request( new GetVolumeRequest($refresh) );
+    }
+
+    
+    /**
+     * Affecte le pourcentage de volume de l'enceinte
+     * 
+     * @param Integer $value
+     * @return Response
+     */
+    public function setVolume($value)
+    {
+        $request = new SetVolumeRequest();
+        $volume = new Volume( $value );
+        $request->setVolume( $volume );
+        return $this->client->request( $request );
+    }
+
+
+
+    /**
      * Retourne la liste des préselections
      * 
-     * @return Array of Preset
+     * @return Presets
      */
-    public function getPresets()
+    public function getPresets($refresh = false)
     {
-        $result = array();
-        $xml = $this->client->request( new GetPresetsRequest() );
-        foreach ($xml->preset as $node) {
-            $result[] = new Preset( $node );
-        }
-        return $result;
+        return $this->client->request( new GetPresetsRequest($refresh) )->getPresets();
     }
 
 
@@ -165,42 +190,26 @@ class SoundTouchApi
 
 
     /**
-     * Envoie une commande de touche à l'enceinte
-     * 
-     * @param String $key
-     * @return Response
-     */
-    public function setKey($key)
-    {
-        $request = new SetKeyRequest();
-        $request->setKey( $key )->setState( SetKeyRequest::PRESS );
-        $result = $this->client->request( $request );
-        $request->setKey( $key )->setState( SetKeyRequest::RELEASE );
-        return $this->client->request( $request );
-    }
-    public function sendCommand($key) { return $this->setKey($key); }
-
-
-    /**
      * Retourne les basses de l'enceinte
      * 
      * @return Bass
      */
-    public function getBass()
+    public function getBass($refresh = false)
     {
-        return new Bass( $this->client->request( new GetBassRequest() ));
+        return $this->client->request( new GetBassRequest($refresh) );
     }
 
     
     /**
      * Affecte le basses de l'enceinte
      * 
-     * @param Integer $bass
+     * @param Integer $value
      * @return Response
      */
-    public function setBass($bass)
+    public function setBass($value)
     {
         $request = new SetBassRequest();
+        $volume = new Bass( $value );
         $request->setBass( $bass );
         return $this->client->request( $request );
     }
@@ -211,9 +220,9 @@ class SoundTouchApi
      * 
      * @return BassCapabilities
      */
-    public function getBassCapabilities()
+    public function getBassCapabilities($refresh = false)
     {
-        return new BassCapabilities( $this->client->request( new GetBassCapabilitiesRequest() ));
+        return $this->client->request( new GetBassCapabilitiesRequest($refresh) );
     }
 
 
@@ -222,9 +231,9 @@ class SoundTouchApi
      * 
      * @return Zone
      */
-    public function getZone()
+    public function getZone($refresh = false)
     {
-        return new Zone( $this->client->request( new GetZoneRequest() ));
+        return $this->client->request( new GetZoneRequest($refresh) );
     }
 
 
@@ -245,13 +254,16 @@ class SoundTouchApi
     /**
      * Ajoute un slave à la zone MultiRoom de l'enceinte
      * 
-     * @param Zone $Zone
+     * @param ZoneSlave $slave
      * @return Response
      */
-    public function addZoneSlave(Zone $zone)
+    public function addZoneSlave(ZoneSlave $slave)
     {
+        $info = $this->getInfo();
         $request = new SetAddZoneRequest();
-        $request->setZone( $zone );
+        $request
+            ->setDeviceID( $info->getDeviceID() )
+            ->setSlave( $slave );
         return $this->client->request( $request );
     }
 
@@ -259,26 +271,51 @@ class SoundTouchApi
     /**
      * Enlève un slave à la zone MultiRoom de l'enceinte
      * 
-     * @param Zone $Zone
+     * @param ZoneSlave $slave
      * @return Response
      */
-    public function removeZoneSlave(Zone $zone)
+    public function removeZoneSlave(ZoneSlave $slave)
     {
+        $info = $this->getInfo();
         $request = new SetRemoveZoneRequest();
-        $request->setZone( $zone );
+        $request
+            ->setDeviceID( $info->getDeviceID() )
+            ->setSlave( $slave );
         return $this->client->request( $request );
     }
 
 
-    /**
-     * Retourne le niveau de volume
-     * 
-     * @return Integer
-     */
-    public function getLevelVolume()
-    {
-        $volume = new Volume( $this->client->request( new GetVolumeRequest() ));
-        return $volume->getActual();
-    }
+   
+    // ### Raccourci Commandes ####################################################################
+
+    public function mute() { return $this->setKey(Key::MUTE); }
+
+    public function upVolume() { return $this->setKey(Key::VOLUME_UP); }
+
+    public function downVolume() { return $this->setKey(Key::VOLUME_DOWN); }
+
+    public function nextTrack() { return $this->setKey(Key::NEXT_TRACK); }
+
+    public function previousTrack() { return $this->setKey(Key::PREV_TRACK); }
+
+    public function pause() { return $this->setKey(Key::PAUSE); }
+
+    public function play() { return $this->setKey(Key::PLAY); }
+
+    public function stop() { return $this->setKey(Key::STOP); }
+
+    public function playPause() { return $this->setKey(Key::PLAY_PAUSE); }
+
+    public function repeatOff() { return $this->setKey(Key::REPEAT_OFF); }
+
+    public function repeatOne() { return $this->setKey(Key::REPEAT_ONE); }
+
+    public function repeatAll() { return $this->setKey(Key::REPEAT_ALL); }
+
+    public function shuffleOn() { return $this->setKey(Key::SHUFFLE_ON); }
+
+    public function shuffleOff() { return $this->setKey(Key::SHUFFLE_OFF); }
+
+    public function power() { return $this->setKey(Key::POWER); }
 
 }

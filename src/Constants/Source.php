@@ -30,5 +30,6 @@ class Source
     const LOCAL_MUSIC       = 'LOCAL_MUSIC';
     const BLUETOOTH         = 'BLUETOOTH';
     const PRODUCT           = 'PRODUCT';
+    const TUNEIN            = 'TUNEIN';
 
 }
