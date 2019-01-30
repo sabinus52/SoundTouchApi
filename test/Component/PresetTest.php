@@ -38,9 +38,8 @@ class PresetTest extends TestCase
             </preset>
             <preset id="3" createdOn="1546713728" updatedOn="1546713728"/>
         </presets>');
-        $presets = new Presets();
-        $presets->setResponse($response->getXml());
-        $this->presets = $presets->getPresets();
+        $this->presets = new Presets();
+        $this->presets->setResponse($response->getXml());
     }
 
 
@@ -83,6 +82,17 @@ class PresetTest extends TestCase
         $this->assertSame('2019-01-05 18:42:08', $obj->getCreatedOn()->format('Y-m-d H:i:s'));
         $this->assertSame('2019-01-05 18:42:08', $obj->getUpdatedOn()->format('Y-m-d H:i:s'));
         $this->assertEmpty($obj->getContentItem());
+    }
+
+
+    public function testClassIterator()
+    {
+        $this->assertSame(3, count($this->presets));
+        $this->presets[] = 'new_preset';
+        $this->assertSame(4, count($this->presets));
+        unset($this->presets[2]);
+        $this->assertSame('new_preset', $this->presets[3]);
+        $this->assertSame(3, count($this->presets));
     }
 
 }
