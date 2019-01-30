@@ -30,9 +30,8 @@ class SourceItemTest extends TestCase
             <sourceItem source="PRODUCT" sourceAccount="TV" status="READY" isLocal="true" multiroomallowed="true">TV</sourceItem>
             <sourceItem source="TUNEIN" status="READY" isLocal="false" multiroomallowed="true" />
         </sources>');
-        $sources = new Sources();
-        $sources->setResponse($response->getXml());
-        $this->sources = $sources->getSources();
+        $this->sources = new Sources();
+        $this->sources->setResponse($response->getXml());
     }
 
 
@@ -93,6 +92,17 @@ class SourceItemTest extends TestCase
         $this->assertSame('READY', $obj->getStatus());
         $this->assertFalse($obj->getIsLocal());
         $this->assertTrue($obj->getMultiroomAllowed());
+    }
+
+
+    public function testClassIterator()
+    {
+        $this->assertSame(5, count($this->sources));
+        $this->sources[] = 'new_source';
+        $this->assertSame(6, count($this->sources));
+        unset($this->sources[2]);
+        $this->assertSame('new_source', $this->sources[5]);
+        $this->assertSame(5, count($this->sources));
     }
 
 }
