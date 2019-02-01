@@ -102,7 +102,7 @@ class SoundTouchApi
      */
     public function getSources($refresh = false)
     {
-        return $this->client->request( new GetSourcesRequest($refresh) )->getSources();
+        return $this->client->request( new GetSourcesRequest($refresh) );
     }
 
 
@@ -171,7 +171,7 @@ class SoundTouchApi
      */
     public function getPresets($refresh = false)
     {
-        return $this->client->request( new GetPresetsRequest($refresh) )->getPresets();
+        return $this->client->request( new GetPresetsRequest($refresh) );
     }
 
 

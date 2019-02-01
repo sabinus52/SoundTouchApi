@@ -10,9 +10,12 @@
 namespace Sabinus\SoundTouch\Component;
 
 use \SimpleXMLElement;
+use \Iterator;
+use \Countable;
+use \ArrayAccess;
 
 
-class Presets
+class Presets implements Iterator, ArrayAccess, Countable
 {
 
     private $presets;
@@ -33,11 +36,68 @@ class Presets
 
 
     /**
-     * @return Array
+     * @see Iterator
      */
-    public function getPresets()
+    public function rewind()
     {
-        return $this->presets;
+        return reset($this->presets);
+    }
+
+    public function current()
+    {
+        return current($this->presets);
+    }
+
+    public function key()
+    {
+        return key($this->presets);
+    }
+
+    public function next()
+    {
+        return next($this->presets);
+    }
+
+    public function valid()
+    {
+        return key($this->presets) !== null;
+    }
+
+
+    /**
+     * @see ArrayAccess
+     */
+    public function offsetSet($offset, $value)
+    {
+        if (is_null($offset)) {
+            $this->presets[] = $value;
+        } else {
+            $this->presets[$offset] = $value;
+        }
+    }
+
+    public function offsetExists($offset)
+    {
+        return isset($this->presets[$offset]);
+    }
+
+    public function offsetUnset($offset)
+    {
+        unset($this->presets[$offset]);
+    }
+
+    public function offsetGet($offset)
+    {
+        return isset($this->presets[$offset]) ? $this->presets[$offset] : null;
+    }
+
+
+    /**
+     * @see Countable
+     */
+    public function count()
+    {
+        return count($this->presets);
     }
 
 }
