@@ -26,11 +26,12 @@ class JeedomSoundTouchApi extends SoundTouchApi
      * Constructeur
      * 
      * @param String $host
+     * @param Boolean $init : initialise ou pas le statut de l'enceinte
      */
-    public function __construct($host)
+    public function __construct($host, $init = true)
     {
         parent::__construct($host, true);
-        $this->getNowPlaying();
+        if ($init) $this->getNowPlaying();
     }
 
 
@@ -64,6 +65,43 @@ class JeedomSoundTouchApi extends SoundTouchApi
     {
         $volume = $this->getVolume($refresh);
         return $volume->isMuted();
+    }
+
+
+    /**
+     * Retrourne si l'enceinte est allumée
+     */
+    public function isPowered($refresh = false)
+    {
+        $status = $this->getNowPlaying($refresh);
+        return ( $status->getSource() != Source::STANDBY );
+    }
+
+
+    /**
+     * Retourne la source sélectionnée
+     */
+    public function getCurrentSource($refresh = false)
+    {
+        $status = $this->getNowPlaying($refresh);
+        if ( !$status->getSource() )
+            return null;
+        elseif ( $status->getSource() != 'PRODUCT' )
+            return strval($status->getSource());
+        elseif ( $status->getContentItem() && $status->getContentItem()->getAccount() )
+            return strval($status->getContentItem()->getAccount());
+        else
+            return strval($status->getSource());
+    }
+
+
+    /**
+     * Retourne l'image de la source courante
+     */
+    public function getCurrentImage($refresh = false)
+    {
+        $status = $this->getNowPlaying($refresh);
+        return $status->getContentItem()->getImage();
     }
 
 
@@ -136,6 +174,36 @@ class JeedomSoundTouchApi extends SoundTouchApi
         $source->setSource(Source::PRODUCT)
             ->setAccount('HDMI_1');
         $this->selectSource($source);
+    }
+
+
+    /**
+     * Retourne les données d'une préselection
+     */
+    public function getPresetByNum($num, $refresh = false)
+    {
+        $presets = $this->getPresets($refresh);
+        $num--;
+        if ( !isset($presets[$num]) ) return null;
+        return array(
+            'source' => $presets[$num]->getContentItem()->getSource(),
+            'name' => $presets[$num]->getContentItem()->getName(),
+            'image' => $presets[$num]->getContentItem()->getImage(),
+        );
+    }
+
+
+    /**
+     * Retourne le status en cours
+     */
+    public function getArrayStatus($refresh = false)
+    {
+        $status = parent::getNowPlaying($refresh);
+        return array(
+            'source.type' => $this->getCurrentSource(),
+            'source.name' => $status->getContentItem()->getName(),
+            'source.image' => $status->getContentItem()->getImage(),
+        );
     }
 
 }
