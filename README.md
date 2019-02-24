@@ -52,7 +52,9 @@ $api->selectSource($source);
 $source = new ContentItem();
 $source->setSource(Source::TUNEIN)
     ->setType('stationurl')
-    ->setLocation('/v1/playback/station/s17695');
+    ->setLocation('/v1/playback/station/s17695')
+    ->setName('FG Radio FG')
+    ->setImage('http://cdn-radiotime-logos.tunein.com/s17695q.png');
 $api->selectSource($source);
 
 // Send Command pause music
