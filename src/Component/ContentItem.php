@@ -64,6 +64,7 @@ class ContentItem
         return $this->name;
     }
 
+
     /**
      * @param String $image
      * @return ContentItem
