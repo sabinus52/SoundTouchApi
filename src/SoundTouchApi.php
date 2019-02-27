@@ -134,6 +134,7 @@ class SoundTouchApi
         return $result;
     }
 
+
     /**
      * Send the pressing of a key to the speaker
      *
@@ -148,6 +149,7 @@ class SoundTouchApi
         return $result;
     }
 
+
     /**
      * Send the releasing of a key to the speaker
      *
@@ -161,6 +163,7 @@ class SoundTouchApi
         $result = $this->client->request( $request );
         return $result;
     }
+
 
     /**
      * Retourne le volume de l'enceinte
