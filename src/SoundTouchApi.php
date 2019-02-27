@@ -121,19 +121,47 @@ class SoundTouchApi
 
 
     /**
-     * Envoie une commande de touche à l'enceinte
-     * 
+     * Send the pressing *and* releasing of a key to the speaker
+     *
      * @param String $key
      * @return Response
      */
     public function setKey($key)
     {
+        $result = $this->pressKey($key);
+        if (!$result) return $result;
+        $result = $this->releaseKey($key);
+        return $result;
+    }
+
+
+    /**
+     * Send the pressing of a key to the speaker
+     *
+     * @param String $key
+     * @return Response
+     */
+    public function pressKey($key)
+    {
         $request = new SetKeyRequest();
         $request->setKey( $key )->setState( SetKeyRequest::PRESS );
         $result = $this->client->request( $request );
-        if (!$result) return false;
+        return $result;
+    }
+
+
+    /**
+     * Send the releasing of a key to the speaker
+     *
+     * @param String $key
+     * @return Response
+     */
+    public function releaseKey($key)
+    {
+        $request = new SetKeyRequest();
         $request->setKey( $key )->setState( SetKeyRequest::RELEASE );
-        return $this->client->request( $request );
+        $result = $this->client->request( $request );
+        return $result;
     }
 
 
@@ -317,5 +345,15 @@ class SoundTouchApi
     public function shuffleOff() { return $this->setKey(Key::SHUFFLE_OFF); }
 
     public function power() { return $this->setKey(Key::POWER); }
+
+    public function setPreset($id)
+    {
+        return $this->pressKey(constant(Key::class . '::PRESET_' . (string)$id));
+    }
+
+    public function playPreset($id)
+    {
+        return $this->releaseKey(constant(Key::class . '::PRESET_' . (string)$id));
+    }
 
 }

@@ -46,6 +46,15 @@ class ContentItem
         }
     }
 
+    /**
+     * @param String $name
+     * @return ContentItem
+     */
+    public function setName($name)
+    {
+        $this->name = $name;
+        return $this;
+    }
 
     /**
      * @return String
@@ -53,6 +62,17 @@ class ContentItem
     public function getName()
     {
         return $this->name;
+    }
+
+
+    /**
+     * @param String $image
+     * @return ContentItem
+     */
+    public function setImage($image)
+    {
+        $this->image = $image;
+        return $this;
     }
 
     /**

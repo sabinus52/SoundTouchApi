@@ -48,4 +48,18 @@ class ContentItemTest extends TestCase
         $this->assertSame('<ContentItem source="TUNEIN" location="/v1/playback/station/s17695" type="stationurl"></ContentItem>', $request->getPayload());
     }
 
+
+    public function testSelectSourceTuneInFull()
+    {
+        $source = new ContentItem();
+        $source->setSource(Source::TUNEIN)
+            ->setType('stationurl')
+            ->setLocation('/v1/playback/station/s17695')
+            ->setName('Radio FG')
+            ->setImage('http://cdn-radiotime-logos.tunein.com/s17695q.png');
+        $request = new SetSelectRequest();
+        $request->setSource($source);
+        $this->assertSame('<ContentItem source="TUNEIN" location="/v1/playback/station/s17695" type="stationurl"><itemName>Radio FG</itemName><containerArt>http://cdn-radiotime-logos.tunein.com/s17695q.png</containerArt></ContentItem>', $request->getPayload());
+    }
+
 }

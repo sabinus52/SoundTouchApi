@@ -42,7 +42,12 @@ class SetSelectRequest extends RequestAbstract implements RequestInterface
             $result.= ' location="' . $this->source->getLocation() . '"';
         if ($this->source->getType())
             $result.= ' type="' . $this->source->getType() . '"';
-        $result.= '></ContentItem>';
+        $result.= '>';
+        if ($this->source->getName())
+            $result.= '<itemName>' . $this->source->getName() . '</itemName>';
+        if ($this->source->getImage())
+            $result.= '<containerArt>' . $this->source->getImage() . '</containerArt>';
+        $result.='</ContentItem>';
         return $result;
     }
 

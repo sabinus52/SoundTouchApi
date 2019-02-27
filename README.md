@@ -52,7 +52,9 @@ $api->selectSource($source);
 $source = new ContentItem();
 $source->setSource(Source::TUNEIN)
     ->setType('stationurl')
-    ->setLocation('/v1/playback/station/s17695');
+    ->setLocation('/v1/playback/station/s17695')
+    ->setName('FG Radio FG')
+    ->setImage('http://cdn-radiotime-logos.tunein.com/s17695q.png');
 $api->selectSource($source);
 
 // Send Command pause music
@@ -72,6 +74,12 @@ $result = $api->getPresets();
 foreach ($result as $preset) {
     print 'Preset '.$preset->getId().' : '.$preset->getContentItem()->getSource().' / '.$preset->getContentItem()->getName()."\n";
 }
+
+// Play preset No. 1
+$api->playPreset(1);
+
+// Set current source as preset No. 5
+$api->setPreset(5);
 ~~~
 
 
