@@ -74,6 +74,12 @@ $result = $api->getPresets();
 foreach ($result as $preset) {
     print 'Preset '.$preset->getId().' : '.$preset->getContentItem()->getSource().' / '.$preset->getContentItem()->getName()."\n";
 }
+
+// Play preset No. 1
+$api->playPreset(1);
+
+// Set current source as preset No. 5
+$api->setPreset(5);
 ~~~
 
 
