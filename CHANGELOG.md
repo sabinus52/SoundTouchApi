@@ -1,5 +1,12 @@
 # Changelog
 
+### v1.3 - 19/04/2019
+
+Add functions for Jeedom :
+- Preview Image
+- Get artist, title, album
+- Status repeat and shuffle
+
 
 ### v1.2 - 27/02/2019
 
