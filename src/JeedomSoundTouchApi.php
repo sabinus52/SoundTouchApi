@@ -96,16 +96,6 @@ class JeedomSoundTouchApi extends SoundTouchApi
 
 
     /**
-     * Retourne l'image de la source courante
-     */
-    public function getCurrentImage($refresh = false)
-    {
-        $status = $this->getNowPlaying($refresh);
-        return $status->getContentItem()->getImage();
-    }
-
-
-    /**
      * Activer ou pas le shuffle
      * 
      * @param Boolean $shuffle
@@ -196,14 +186,113 @@ class JeedomSoundTouchApi extends SoundTouchApi
     /**
      * Retourne le status en cours
      */
-    public function getArrayStatus($refresh = false)
+    public function getArrayNowPlaying($refresh = false)
     {
-        $status = parent::getNowPlaying($refresh);
+        $status = $this->getNowPlaying($refresh);
         return array(
+            'source.power' => $this->isPowered(),
             'source.type' => $this->getCurrentSource(),
             'source.name' => $status->getContentItem()->getName(),
             'source.image' => $status->getContentItem()->getImage(),
+            'status.playing' => $this->getStatePlay(),
+            'status.repeat' => $this->getStateRepeat(),
+            'status.shuffle' => $this->isShuffle(),
+            'track.artist' => $this->getTrackArtist(),
+            'track.title' => $this->getTrackTitle(),
+            'track.album' => $this->getTrackAlbum(),
+            'track.image' => $this->getTrackImage(),
+            'volume.level' => $this->getLevelVolume(),
+            'volume.muted' => $this->isMuted(),
         );
+    }
+
+
+    /**
+     * Retourne l'image de la source courante
+     */
+    public function getPreviewImage($refresh = false)
+    {
+        $status = $this->getNowPlaying($refresh);
+        if ( $status->getImage() ) {
+            return $status->getImage();
+        } elseif ( $status->getContentItem()->getImage() ) {
+            return $status->getContentItem()->getImage();
+        } elseif ( $this->getCurrentSource() ) {
+            return 'local://'.$this->getCurrentSource();
+        } else {
+            return 'local://null';
+        }
+    }
+
+
+    public function isShuffle($refresh = false)
+    {
+        $status = $this->getNowPlaying($refresh);
+        return ( $status->getShuffleSetting() == 'SHUFFLE_ON' );
+    }
+
+
+    public function getStateRepeat($refresh = false)
+    {
+        $status = $this->getNowPlaying($refresh);
+        switch ($status->getRepeatSetting()) {
+            case 'REPEAT_OFF': return 'OFF';
+            case 'REPEAT_ALL': return 'ALL';
+            case 'REPEAT_ONE': return 'ONE';
+            default          : return 'OFF';
+        }
+    }
+
+
+    public function getStatePlay($refresh = null)
+    {
+        $status = $this->getNowPlaying($refresh);
+        switch ($status->getPlayStatus()) {
+            case 'PLAY_STATE'       : return 'PLAY';
+            case 'PAUSE_STATE'      : return 'PAUSE';
+            case 'STOP_STATE'       : return 'STOP';
+            case 'BUFFERING_STATE'  : return 'BUFFERING';
+            default                 : return 'OFF';
+        }
+    }
+
+
+    public function getTrackArtist($refresh = false)
+    {
+        $status = $this->getNowPlaying($refresh);
+        if ( $status->getStreamType() == 'RADIO_STREAMING' && $status->getStationName() ) {
+            return $status->getStationName();
+        } elseif ( $status->getStreamType() == 'RADIO_STREAMING' && $status->getTrack() ) {
+            return $status->getTrack();
+        } elseif ( $status->getArtist() ) {
+            return $status->getArtist();
+        } elseif ( $this->isPowered() ) {
+            return $this->getCurrentSource();
+        } else {
+            return null;
+        }
+    }
+
+    public function getTrackTitle($refresh = false)
+    {
+        $status = $this->getNowPlaying($refresh);
+        if ( $status->getStreamType() == 'RADIO_STREAMING' && $status->getArtist() ) {
+            return $status->getArtist();
+        } else {
+            return $status->getTrack();
+        }
+    }
+
+    public function getTrackAlbum($refresh = false)
+    {
+        $status = $this->getNowPlaying($refresh);
+        return $status->getAlbum();
+    }
+
+    public function getTrackImage($refresh = false)
+    {
+        $status = $this->getNowPlaying($refresh);
+        return $status->getImage();
     }
 
 }
