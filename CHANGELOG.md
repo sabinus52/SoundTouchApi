@@ -1,5 +1,10 @@
 # Changelog
 
+### v1.4 - 15/02/2020
+
+- Fix return resquest in error
+
+
 ### v1.3 - 19/04/2019
 
 Add functions for Jeedom :
