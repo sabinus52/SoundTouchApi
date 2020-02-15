@@ -14,6 +14,7 @@ use \Sabinus\SoundTouch\Constants\Key;
 use \Sabinus\SoundTouch\Constants\Source;
 use \Sabinus\SoundTouch\Request\GetVolumeRequest;
 use \Sabinus\SoundTouch\Request\GetBassRequest;
+use \Sabinus\SoundTouch\Component\NowPlaying;
 use \Sabinus\SoundTouch\Component\Volume;
 use \Sabinus\SoundTouch\Component\Bass;
 use \Sabinus\SoundTouch\Component\ContentItem;
@@ -52,6 +53,7 @@ class JeedomSoundTouchApi extends SoundTouchApi
     public function getLevelVolume($refresh = false)
     {
         $volume = $this->getVolume($refresh);
+        if ( ! ($volume instanceof Volume) ) return null;
         return $volume->getActual();
     }
 
@@ -64,6 +66,7 @@ class JeedomSoundTouchApi extends SoundTouchApi
     public function isMuted($refresh = false)
     {
         $volume = $this->getVolume($refresh);
+        if ( ! ($volume instanceof Volume) ) return null;
         return $volume->isMuted();
     }
 
@@ -74,6 +77,7 @@ class JeedomSoundTouchApi extends SoundTouchApi
     public function isPowered($refresh = false)
     {
         $status = $this->getNowPlaying($refresh);
+        if ( ! ($status instanceof NowPlaying) ) return null;
         return ( $status->getSource() != Source::STANDBY );
     }
 
@@ -84,6 +88,7 @@ class JeedomSoundTouchApi extends SoundTouchApi
     public function getCurrentSource($refresh = false)
     {
         $status = $this->getNowPlaying($refresh);
+        if ( ! ($status instanceof NowPlaying) ) return null;
         if ( !$status->getSource() )
             return null;
         elseif ( $status->getSource() != 'PRODUCT' )
@@ -114,6 +119,7 @@ class JeedomSoundTouchApi extends SoundTouchApi
     public function powerOn()
     {
         $status = $this->getNowPlaying(true);
+        if ( ! ($status instanceof NowPlaying) ) return null;
         if ( $status->getSource() == Source::STANDBY )
             return $this->setKey(Key::POWER);
         return true;
@@ -126,6 +132,7 @@ class JeedomSoundTouchApi extends SoundTouchApi
     public function powerOff()
     {
         $status = $this->getNowPlaying(true);
+        if ( ! ($status instanceof NowPlaying) ) return null;
         if ( $status->getSource() != Source::STANDBY )
             return $this->setKey(Key::POWER);
         return true;
@@ -189,6 +196,7 @@ class JeedomSoundTouchApi extends SoundTouchApi
     public function getArrayNowPlaying($refresh = false)
     {
         $status = $this->getNowPlaying($refresh);
+        if ( ! ($status instanceof NowPlaying) ) return null;
         return array(
             'source.power' => $this->isPowered(),
             'source.type' => $this->getCurrentSource(),
@@ -213,6 +221,7 @@ class JeedomSoundTouchApi extends SoundTouchApi
     public function getPreviewImage($refresh = false)
     {
         $status = $this->getNowPlaying($refresh);
+        if ( ! ($status instanceof NowPlaying) ) return null;
         if ( $status->getImage() ) {
             return $status->getImage();
         } elseif ( $status->getContentItem()->getImage() ) {
@@ -228,6 +237,7 @@ class JeedomSoundTouchApi extends SoundTouchApi
     public function isShuffle($refresh = false)
     {
         $status = $this->getNowPlaying($refresh);
+        if ( ! ($status instanceof NowPlaying) ) return null;
         return ( $status->getShuffleSetting() == 'SHUFFLE_ON' );
     }
 
@@ -235,6 +245,7 @@ class JeedomSoundTouchApi extends SoundTouchApi
     public function getStateRepeat($refresh = false)
     {
         $status = $this->getNowPlaying($refresh);
+        if ( ! ($status instanceof NowPlaying) ) return null;
         switch ($status->getRepeatSetting()) {
             case 'REPEAT_OFF': return 'OFF';
             case 'REPEAT_ALL': return 'ALL';
@@ -247,6 +258,7 @@ class JeedomSoundTouchApi extends SoundTouchApi
     public function getStatePlay($refresh = null)
     {
         $status = $this->getNowPlaying($refresh);
+        if ( ! ($status instanceof NowPlaying) ) return null;
         switch ($status->getPlayStatus()) {
             case 'PLAY_STATE'       : return 'PLAY';
             case 'PAUSE_STATE'      : return 'PAUSE';
@@ -260,6 +272,7 @@ class JeedomSoundTouchApi extends SoundTouchApi
     public function getTrackArtist($refresh = false)
     {
         $status = $this->getNowPlaying($refresh);
+        if ( ! ($status instanceof NowPlaying) ) return null;
         if ( $status->getStreamType() == 'RADIO_STREAMING' && $status->getStationName() ) {
             return $status->getStationName();
         } elseif ( $status->getStreamType() == 'RADIO_STREAMING' && $status->getTrack() ) {
@@ -276,6 +289,7 @@ class JeedomSoundTouchApi extends SoundTouchApi
     public function getTrackTitle($refresh = false)
     {
         $status = $this->getNowPlaying($refresh);
+        if ( ! ($status instanceof NowPlaying) ) return null;
         if ( $status->getStreamType() == 'RADIO_STREAMING' && $status->getArtist() ) {
             return $status->getArtist();
         } else {
@@ -286,12 +300,14 @@ class JeedomSoundTouchApi extends SoundTouchApi
     public function getTrackAlbum($refresh = false)
     {
         $status = $this->getNowPlaying($refresh);
+        if ( ! ($status instanceof NowPlaying) ) return null;
         return $status->getAlbum();
     }
 
     public function getTrackImage($refresh = false)
     {
         $status = $this->getNowPlaying($refresh);
+        if ( ! ($status instanceof NowPlaying) ) return null;
         return $status->getImage();
     }
 
