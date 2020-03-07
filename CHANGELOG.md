@@ -1,5 +1,10 @@
 # Changelog
 
+### v1.4.1 - 07/03/2020
+
+- Back to version 6.5.0 of extern library "guzzle"
+
+
 ### v1.4 - 15/02/2020
 
 - Fix return resquest in error
