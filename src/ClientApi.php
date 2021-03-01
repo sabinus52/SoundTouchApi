@@ -161,7 +161,7 @@ class ClientApi
         }
 
         // Parse la réponse
-        $response->parseContent($result->getBody()->getContents());
+            $response->parseContent($result->getBody()->getContents());
         if ( ! $response->isSuccess() ) {
             $this->msgError = $response->getMessageError();
             return false;
