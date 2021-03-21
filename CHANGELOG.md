@@ -1,5 +1,14 @@
 # Changelog
 
+### v1.5.0 - 21/03/2021
+
+- Remove class `Jeedom`
+- Add constants PLAY_STATUS and STREAM_STATUS
+- Add member `hostname`
+- Additional functions
+- Some Fix
+
+
 ### v1.4.1 - 07/03/2020
 
 - Back to version 6.5.0 of extern library "guzzle"

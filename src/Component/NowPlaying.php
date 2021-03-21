@@ -74,6 +74,7 @@ class NowPlaying
         $this->track = strval($xml->track);
         $this->artist = strval($xml->artist);
         $this->album = strval($xml->album);
+        $this->image = '';
         if ($xml->art) {
             $imgStatus = strval($xml->art->attributes()->artImageStatus);
             if ($imgStatus == ImageStatus::IMAGE_PRESENT) {

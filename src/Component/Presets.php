@@ -30,7 +30,7 @@ class Presets implements Iterator, ArrayAccess, Countable
     {
         $this->presets = array();
         foreach ($xml->preset as $node) {
-            $this->presets[] = new Preset( $node );
+            $this->presets[intval($node->attributes()->id)] = new Preset( $node );
         }
     }
 

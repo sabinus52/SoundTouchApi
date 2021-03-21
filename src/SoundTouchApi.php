@@ -10,6 +10,7 @@
 namespace Sabinus\SoundTouch;
 
 use \Sabinus\SoundTouch\Constants\Key;
+use \Sabinus\SoundTouch\Constants\Source;
 use \Sabinus\SoundTouch\Request\GetInfoRequest;
 use \Sabinus\SoundTouch\Request\GetNowPlayingRequest;
 use \Sabinus\SoundTouch\Request\GetVolumeRequest;
@@ -50,6 +51,12 @@ class SoundTouchApi
 
 
     /**
+     * @var String
+     */
+    protected $hostname;
+
+
+    /**
      * Constructeur
      * 
      * @param String $host
@@ -59,6 +66,7 @@ class SoundTouchApi
     {
         $this->client = new ClientApi($host);
         $this->client->setCached($isCached);
+        $this->hostname = $host;
     }
 
 
@@ -354,6 +362,82 @@ class SoundTouchApi
     public function playPreset($id)
     {
         return $this->releaseKey(constant(Key::class . '::PRESET_' . (string)$id));
+    }
+
+
+    /**
+     * Activer ou pas le shuffle
+     * 
+     * @param Boolean $shuffle
+     */
+    public function shuffle($shuffle) {
+        if ($shuffle)
+            $this->setKey(Key::SHUFFLE_ON);
+        else
+            $this->setKey(Key::SHUFFLE_OFF);
+    }
+
+
+    /**
+     * Allume l'enceinte
+     */
+    public function powerOn()
+    {
+        $status = $this->getNowPlaying(true);
+        if ( ! ($status instanceof NowPlaying) ) return null;
+        if ( $status->getSource() == Source::STANDBY )
+            return $this->setKey(Key::POWER);
+        return true;
+    }
+
+
+    /**
+     * Eteins l'enceinte
+     */
+    public function powerOff()
+    {
+        $status = $this->getNowPlaying(true);
+        if ( ! ($status instanceof NowPlaying) ) return null;
+        if ( $status->getSource() != Source::STANDBY )
+            return $this->setKey(Key::POWER);
+        return true;
+    }
+
+
+    /**
+     * Retourne le niveau de volume
+     * 
+     * @return Integer
+     */
+    public function getLevelVolume($refresh = false)
+    {
+        $volume = $this->getVolume($refresh);
+        if ( ! ($volume instanceof Volume) ) return null;
+        return $volume->getActual();
+    }
+
+    
+    /**
+     * Retourne si le volume est coupé
+     * 
+     * @return Boolean
+     */
+    public function isMuted($refresh = false)
+    {
+        $volume = $this->getVolume($refresh);
+        if ( ! ($volume instanceof Volume) ) return null;
+        return $volume->isMuted();
+    }
+
+
+    /**
+     * Retrourne si l'enceinte est allumée
+     */
+    public function isPowered($refresh = false)
+    {
+        $status = $this->getNowPlaying($refresh);
+        if ( ! ($status instanceof NowPlaying) ) return null;
+        return ( $status->getSource() != Source::STANDBY );
     }
 
 }
