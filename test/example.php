@@ -6,6 +6,8 @@ use Sabinus\SoundTouch\SoundTouchApi;
 use Sabinus\SoundTouch\Component\ContentItem;
 use Sabinus\SoundTouch\Constants\Source;
 use Sabinus\SoundTouch\Constants\Key;
+use Sabinus\SoundTouch\Component\Zone;
+use Sabinus\SoundTouch\Component\ZoneSlave;
 
 
 // Initialize object API
@@ -56,3 +58,18 @@ $result = $api->getPresets();
 foreach ($result as $preset) {
     print 'Preset '.$preset->getId().' : '.$preset->getContentItem()->getSource().' / '.$preset->getContentItem()->getName()."\n";
 }
+
+
+// Zone MultiRoom : Create zone master
+$zone = new Zone('XXXXXXXXXXXX');
+$slave = new ZoneSlave();
+$slave->setMacAddress('XXXXXXXXXXXX')->setIpAddress('192.168.0.11');
+$zone->addSlave($slave);
+$api->setZone($zone);
+// Zone MultiRoom : Add zone slave
+$slave = new ZoneSlave();
+$slave->setMacAddress('YYYYYYYYYYYY')->setIpAddress('192.168.0.12');
+$api->addZoneSlave($slave);
+
+$result = $api->getZone();
+print_r($result);
