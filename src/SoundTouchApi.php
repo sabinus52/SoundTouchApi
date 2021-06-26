@@ -18,6 +18,7 @@ use \Sabinus\SoundTouch\Request\SetVolumeRequest;
 use \Sabinus\SoundTouch\Request\GetSourcesRequest;
 use \Sabinus\SoundTouch\Request\SetSelectRequest;
 use \Sabinus\SoundTouch\Request\GetPresetsRequest;
+use \Sabinus\SoundTouch\Request\GetZoneRequest;
 use \Sabinus\SoundTouch\Request\SetNameRequest;
 use \Sabinus\SoundTouch\Request\SetKeyRequest;
 use \Sabinus\SoundTouch\Request\GetBassRequest;
@@ -37,6 +38,7 @@ use \Sabinus\SoundTouch\Component\Presets;
 use \Sabinus\SoundTouch\Component\Bass;
 use \Sabinus\SoundTouch\Component\BassCapabilities;
 use \Sabinus\SoundTouch\Component\Zone;
+use \Sabinus\SoundTouch\Component\ZoneSlave;
 
 
 class SoundTouchApi
