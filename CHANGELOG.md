@@ -1,5 +1,10 @@
 # Changelog
 
+### v1.5.1 - 26/06/2021
+
+- Fix missing class for the zone
+
+
 ### v1.5.0 - 21/03/2021
 
 - Remove class `Jeedom`
