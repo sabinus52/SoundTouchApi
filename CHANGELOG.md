@@ -1,5 +1,10 @@
 # Changelog
 
+### v1.5.2 - 11/06/2022
+
+- Update composer.json for patch guzzlehttp/guzzle : CVE-2022-29248, CVE-2022-31042, CVE-2022-31043
+
+
 ### v1.5.1 - 26/06/2021
 
 - Fix missing class for the zone
